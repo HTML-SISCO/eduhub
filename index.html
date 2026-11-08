@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EduHub – your student toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&family=Fraunces:wght@600;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6fb;--surface:#fff;--ink:#14213d;--muted:#5b6784;--line:#d9e0ee;--brand:#2b50d8;--brand-ink:#fff;--sun:#ffb703;--ok:#12805c;--bad:#c2362b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1830;--surface:#18233f;--ink:#eaf0ff;--muted:#9fb0d6;--line:#2b3a60;--brand:#7c9bff;--brand-ink:#0f1830;--sun:#ffc83d;--ok:#4fd1a1;--bad:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1830;--surface:#18233f;--ink:#eaf0ff;--muted:#9fb0d6;--line:#2b3a60;--brand:#7c9bff;--brand-ink:#0f1830;--sun:#ffc83d;--ok:#4fd1a1;--bad:#ff8a80;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;line-height:1.1;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+.bar{max-width:1100px;margin:auto;padding:.7rem 1.2rem;display:flex;align-items:center;gap:1rem}
+.logo{font:800 1.35rem "Bricolage Grotesque",sans-serif;text-decoration:none;margin-right:auto}
+.logo span{background:var(--sun);color:#14213d;padding:0 .3em;border-radius:.3em;margin-right:.15em}
+nav{display:flex;gap:.2rem;overflow-x:auto}
+nav a{padding:.4rem .7rem;border-radius:.6rem;text-decoration:none;color:var(--muted);font-weight:500;white-space:nowrap}
+nav a:hover{background:var(--surface);color:var(--ink)}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:.6rem;width:2.4rem;height:2.4rem;cursor:pointer}
+main{max-width:1100px;margin:auto;padding:0 1.2rem 3rem}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;padding:3.5rem 0 2.5rem}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;letter-spacing:-.03em}
+.hero p{color:var(--muted);max-width:44ch;font-size:1.1rem}
+.stats{display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.stats b{display:block;font:800 1.8rem "Bricolage Grotesque",sans-serif}
+.stats small{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:1.1rem;padding:1.3rem}
+.timer{text-align:center;padding:1.6rem;border-radius:1.8rem;box-shadow:0 18px 0 -8px var(--sun)}
+.seg{display:inline-flex;background:var(--bg);border-radius:.8rem;padding:.25rem;gap:.2rem}
+.seg button{border:0;background:none;padding:.35rem .8rem;border-radius:.6rem;cursor:pointer;color:var(--muted);font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.ring{position:relative;width:min(260px,70vw);margin:1.2rem auto}
+.ring svg{width:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10}
+.ring .t{stroke:var(--line)}.ring .p{stroke:var(--brand);stroke-linecap:round;transition:stroke-dashoffset .4s linear}
+.ring .time{position:absolute;inset:0;display:grid;place-items:center;font:800 3.2rem "Bricolage Grotesque",sans-serif;font-variant-numeric:tabular-nums}
+.btn{border:0;background:var(--brand);color:var(--brand-ink);padding:.6rem 1.2rem;border-radius:.8rem;font-weight:700;cursor:pointer}
+.btn.alt{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.btn:active{transform:translateY(1px)}
+section.tool{padding:1.6rem 0}
+section.tool>h2{font-size:1.9rem;margin-bottom:.25rem}
+section.tool>p{margin:0 0 1rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:.7rem;padding:.55rem .75rem;min-width:0}
+input[type=text],input[type=email]{flex:1}
+textarea{width:100%;min-height:200px;resize:vertical}
+ul{list-style:none;padding:0;margin:0}
+.task{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.task span{flex:1;overflow-wrap:anywhere}
+.task.done span{text-decoration:line-through;color:var(--muted)}
+.x{border:0;background:none;color:var(--bad);cursor:pointer;font-size:1.1rem}
+.meter{height:.6rem;background:var(--bg);border-radius:1rem;overflow:hidden;margin:.4rem 0 .8rem}
+.meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.gpa{display:grid;grid-template-columns:1fr 70px 80px auto;gap:.4rem;margin-bottom:.4rem}
+.big{font:800 2.6rem "Bricolage Grotesque",sans-serif}
+.flash{min-height:150px;display:grid;place-items:center;text-align:center;font:600 1.3rem "Bricolage Grotesque",sans-serif;border:2px dashed var(--line);border-radius:1rem;padding:1rem;cursor:pointer;background:var(--bg);width:100%}
+.flash.back{border-style:solid;border-color:var(--brand);color:var(--brand)}
+.week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem}
+.day h3{font-size:1rem;margin-bottom:.4rem}
+.slot{background:var(--bg);border-left:4px solid var(--sun);border-radius:.5rem;padding:.35rem .5rem;margin-bottom:.4rem;font-size:.9rem;cursor:pointer;overflow-wrap:anywhere}
+.slot small{display:block;color:var(--muted)}
+.scroll{overflow-x:auto}
+.empty{color:var(--muted);font-size:.9rem;margin:.4rem 0}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 1.2rem);transform:translate(-50%,200%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:.8rem;transition:transform .25s;z-index:40}
+.toast.show{transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);padding:1.5rem;text-align:center;color:var(--muted)}
+@media (max-width:820px){.hero,.grid{grid-template-columns:1fr}.week{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+[hidden]{display:none!important}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-top:.6rem}
+.keys button{padding:.65rem .2rem;border:1px solid var(--line);background:var(--bg);border-radius:.6rem;cursor:pointer;font-weight:600}
+.keys button.op{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+#cIn{width:100%;font-size:1.2rem}
+#cOut{font:800 1.8rem "Bricolage Grotesque",sans-serif;min-height:2.4rem;margin-top:.4rem;overflow-wrap:anywhere}
+input[type=range]{padding:0;flex:1;accent-color:var(--brand)}
+.cd{font-weight:700;white-space:nowrap}
+.grid.one{grid-template-columns:1fr}
+main#top.single{max-width:780px}
+nav a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:inset 0 -3px 0 var(--sun)}
+.launch{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;padding-bottom:2rem}
+.launch .card{display:block;width:100%;text-align:left;cursor:pointer;color:inherit}
+.launch .card:hover{border-color:var(--brand);transform:translateY(-2px)}
+.launch b{display:block;font:800 1.15rem "Bricolage Grotesque",sans-serif;margin-bottom:.25rem}
+.launch span{color:var(--muted)}
+#logout{white-space:nowrap;padding:.45rem .8rem}
+nav{scrollbar-width:thin}
+nav a{flex:none}
+header .bar{flex-wrap:wrap;gap:.5rem .8rem}header nav{order:5;flex-basis:100%;padding-bottom:.3rem}
+/* ---- Device compatibility ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100vh;min-height:100dvh;-webkit-tap-highlight-color:transparent}
+img,svg,video,canvas{max-width:100%;height:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+input,select,textarea{font-size:16px}
+@media (pointer:coarse){button,.btn,nav a,select{min-height:44px}.keys button{min-height:48px}.x{min-width:40px;min-height:40px}input[type=checkbox]{width:22px;height:22px}}
+@media (hover:none){.launch .card:hover{transform:none}}
+@media (max-width:1024px){main,.lhero,.feat{padding-left:1rem;padding-right:1rem}}
+@media (max-width:480px){.hero{padding-top:2rem}.row2{grid-template-columns:1fr}.week{grid-template-columns:1fr}.timer{padding:1rem}.ring .time{font-size:2.6rem}.toast{width:calc(100% - 2rem);text-align:center}}
+@media (max-width:340px){.stats{gap:.8rem}.btn{padding:.5rem .8rem}}
+@media (max-height:480px) and (orientation:landscape){.hero{padding:1.5rem 0}.auth{align-items:start}}
+@media (min-width:1600px){html{font-size:112.5%}}
+@media print{header,nav,footer,.auth,.toast,.landing{display:none!important}body{background:#fff;color:#000}}
+.spotify{display:flex;align-items:center;gap:.8rem;background:#121212;color:#fff;border-radius:1rem;padding:.8rem 1.1rem;text-decoration:none;font:700 1.15rem "Bricolage Grotesque",sans-serif}
+.spotify svg{width:2.4rem;height:2.4rem;flex:none}
+.spotify:hover{background:#242424}
+.chip{display:inline-block;padding:.45rem .9rem;border:1px solid var(--line);background:var(--bg);border-radius:2rem;text-decoration:none;font-weight:500}
+.chip:hover{border-color:#1DB954}
+.grid>*{min-width:0}
+#wbCanvas{display:block;width:100%;height:auto;margin-top:.8rem;background:#fff;border:2px solid var(--line);border-radius:.8rem;touch-action:none;cursor:crosshair}
+.seg-btn[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.cert{position:fixed;inset:0;z-index:60;background:rgba(10,20,40,.65);display:grid;place-items:center;padding:1rem;overflow:auto}
+.certbox{background:#fffdf5;color:#14213d;border:10px double #b8860b;padding:2.5rem 2rem;max-width:760px;text-align:center;font-family:Georgia,'Times New Roman',serif}
+@media print{body.certprint>*:not(#cert){display:none!important}body.certprint #cert{position:static;background:none;display:block}body.certprint .certacts{display:none}body.certprint .certbox{margin:auto}}
+@media (max-width:600px){.certbox{padding:1.5rem 1rem}}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.8rem;margin-top:.8rem}
+.qg{display:flex;flex-direction:column;gap:.15rem;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:1rem;padding:1rem;color:inherit;cursor:pointer}
+button.qg:hover{border-color:var(--brand)}
+.qg b{font:800 1.15rem "Bricolage Grotesque",sans-serif}.qg span{color:var(--muted)}.qg .qbest{font-weight:600;color:var(--ok)}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.qopt{display:flex;gap:.6rem;align-items:center;padding:.9rem;border:2px solid var(--line);background:var(--bg);border-radius:.8rem;font-weight:600;cursor:pointer;text-align:left;overflow-wrap:anywhere}
+.qopt b{color:var(--muted);font-weight:700}
+.qopt:hover{border-color:var(--brand)}.qopt.ok{border-color:var(--ok);box-shadow:inset 0 0 0 2px var(--ok)}.qopt.bad{border-color:var(--bad);box-shadow:inset 0 0 0 2px var(--bad)}
+@media (max-width:600px){.qopts{grid-template-columns:1fr}}
+.chart7{display:flex;gap:.6rem;height:170px;align-items:stretch}
+.bar7{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;min-width:0}
+.bar7 .tr{flex:1;width:100%;display:flex;align-items:flex-end}
+.bar7 i{display:block;width:100%;background:var(--brand);border-radius:.4rem .4rem 0 0;min-height:3px}
+.bar7 span{font-size:.85rem;font-weight:700}.bar7 small{color:var(--muted)}
+#moods button{font-size:1.5rem;padding:.3rem .8rem}
+.task select{max-width:9rem}
+.seg{max-width:100%;flex-wrap:wrap}
+:root[data-theme="ocean"]{--bg:#e8f5f7;--surface:#fff;--ink:#0b2e3a;--muted:#4d7482;--line:#cde2e7;--brand:#0a8fa8;--brand-ink:#fff;--sun:#ff9f43;--ok:#12805c;--bad:#c2362b;color-scheme:light}
+:root[data-theme="sunset"]{--bg:#fff1e8;--surface:#fff;--ink:#3a1830;--muted:#8a5a6e;--line:#f2d5cc;--brand:#e4502f;--brand-ink:#fff;--sun:#ffbe3d;--ok:#12805c;--bad:#b3261e;color-scheme:light}
+:root[data-theme="forest"]{--bg:#eaf4ea;--surface:#fff;--ink:#16301f;--muted:#567a60;--line:#d0e3d1;--brand:#2e8b57;--brand-ink:#fff;--sun:#e9c46a;--ok:#1b7a47;--bad:#c2362b;color-scheme:light}
+:root[data-theme="grape"]{--bg:#1d1230;--surface:#2a1b45;--ink:#f3ecff;--muted:#b9a6dd;--line:#3f2c66;--brand:#b388ff;--brand-ink:#1d1230;--sun:#ffd166;--ok:#6ee7b7;--bad:#ff8a80;color-scheme:dark}
+:root[data-style="classic"] :is(h1,h2,h3,.logo,.stats b,.ring .time,.big,.flash){font-family:Fraunces,Georgia,"Times New Roman",serif}
+:root[data-style="classic"] :is(.btn,.icon-btn,input,select,textarea,.seg,.seg button,.back,.th){border-radius:.3rem}
+:root[data-style="classic"] .card{box-shadow:0 1px 0 var(--line)}
+:root[data-style="sharp"] :is(h1,h2,h3,.logo,.stats b,.ring .time,.big,.flash){font-family:"Space Grotesk","DM Sans",sans-serif;letter-spacing:-.02em}
+:root[data-style="sharp"] :is(.card,.btn,.icon-btn,input,select,textarea,.seg,.seg button,.slot,nav a,.flash,.back,.th,.toast,.meter,.logo span){border-radius:.15rem}
+:root[data-style="sharp"] .card{border-width:2px}
+:root[data-style="sharp"] .timer{box-shadow:8px 8px 0 var(--sun)}
+.av{width:2.4rem;height:2.4rem;border-radius:50%;border:0;color:#fff;font-weight:700;background-size:cover;background-position:center;cursor:pointer;display:grid;place-items:center;flex:none}
+.av.big{width:5.5rem;height:5.5rem;font-size:1.8rem;cursor:default}
+#profilePage{display:none;max-width:1100px;margin:auto;padding:2rem 1.2rem 3rem}
+body.viewprofile #profilePage{display:block}
+body.viewprofile main#top{display:none}
+body.viewhome #profilePage{display:none}
+.pphead{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.pphead h2{font-size:2rem}
+.avrow{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:1.2rem}
+.swatches{display:flex;gap:.45rem;margin-top:.6rem}
+.sw{width:1.7rem;height:1.7rem;border-radius:50%;border:2px solid var(--surface);outline:1px solid var(--line);cursor:pointer}
+.sw[aria-pressed="true"]{outline:3px solid var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.pstats{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-top:.8rem}
+.pstats b{display:block;font:800 1.7rem "Bricolage Grotesque",sans-serif}
+.pstats small{color:var(--muted)}
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:.5rem;margin:.7rem 0 1rem}
+.th{display:flex;flex-direction:column;gap:.35rem;align-items:flex-start;background:var(--bg);border:2px solid var(--line);border-radius:.8rem;padding:.5rem;cursor:pointer;font-weight:500}
+.th[aria-pressed="true"]{border-color:var(--brand)}
+.dots{display:flex}.dots i{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid var(--surface);margin-right:-.3rem}
+.locked header,.locked main,.locked footer{display:none}
+body:not(.locked) .auth,body:not(.authing) .auth{display:none}
+.landing{display:none}
+body.locked:not(.authing) .landing{display:block}
+.lhead{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.lhead .bar{justify-content:space-between}
+.lhead .acts{display:flex;gap:.5rem}
+.lhero{max-width:1100px;margin:auto;padding:4.5rem 1.2rem 2.5rem}
+.lhero h1{font-size:clamp(2.8rem,8vw,5.6rem);font-weight:800;letter-spacing:-.035em;max-width:11ch}
+.lhero p{color:var(--muted);font-size:1.2rem;max-width:46ch;margin:1.2rem 0 1.6rem}
+.lhero .acts{display:flex;gap:.7rem;flex-wrap:wrap}
+.lhero .btn{padding:.8rem 1.5rem;font-size:1.05rem}
+.feat{max-width:1100px;margin:auto;padding:1rem 1.2rem 3rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.feat h3{font-size:1.2rem;margin-bottom:.3rem}
+.feat p{margin:0;color:var(--muted)}
+.back{border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;padding:.4rem .9rem;border-radius:.7rem;font-weight:500}
+.in-only{display:none}
+body:not(.locked) .in-only{display:inline-block}
+body:not(.locked) .out-only{display:none}
+body.viewhome .landing{display:block}
+body.viewhome header,body.viewhome main,body.viewhome footer{display:none}
+.auth{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 1.2rem) 1.2rem calc(env(safe-area-inset-bottom,0px) + 1.2rem);background:var(--bg);overflow:auto}
+.authcard{width:min(420px,100%);box-shadow:0 18px 0 -8px var(--sun)}
+.authcard h2{font-size:1.8rem;margin:1rem 0 .2rem}
+.authcard .seg{margin:.6rem 0 1rem}
+.f{display:block;font-weight:500;margin-bottom:.8rem}
+.f input{display:block;width:100%;margin-top:.25rem}
+.chk{display:flex;gap:.5rem;align-items:center;color:var(--muted);margin-bottom:.5rem;font-size:.95rem}
+.err{color:var(--bad);min-height:1.4em;margin:.3rem 0 .6rem;font-weight:500}
+.who{color:var(--muted);font-weight:500;white-space:nowrap;max-width:16ch;overflow:hidden;text-overflow:ellipsis}
+.link{border:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer;margin-left:.6rem}
+@media (max-width:820px){.who{display:none}}
+</style>
+<script>window.addEventListener('error',function(e){var d=document.getElementById('errbar');if(!d){d=document.createElement('div');d.id='errbar';(document.body||document.documentElement).appendChild(d)}d.style.cssText='position:fixed;z-index:99999;left:0;right:0;bottom:0;padding:12px 16px;background:#fde8e6;color:#7a1d14;font:15px/1.4 system-ui,sans-serif;border-top:2px solid #c2362b';d.textContent='EduHub error: '+(e.message||'unknown')+' | '+navigator.userAgent.slice(0,90)});</script>
+</head>
+<body class="locked">
+<noscript><div style="padding:14px 18px;background:#fde8e6;color:#7a1d14;font:16px/1.4 system-ui,sans-serif;border-bottom:2px solid #c2362b">JavaScript is turned off or blocked here, so EduHub can’t run. Open this file directly in Chrome, Edge, Firefox or Safari (not in a preview window).</div></noscript>
+<div class="landing" id="landing">
+ <div class="lhead"><div class="bar">
+  <div class="logo"><span>Edu</span>Hub</div>
+  <div class="acts"><button class="btn alt out-only" data-open="login">Log in</button><button class="btn out-only" data-open="signup">Sign up</button><button class="btn alt in-only" data-logout>Log out</button><button class="btn in-only" data-dash>Open my dashboard</button></div>
+ </div></div>
+ <div class="lhero">
+  <h1>Plan it, focus, finish it.</h1>
+  <p>One calm place for your study timer, tasks, timetable, flashcards, notes and more.</p>
+  <div class="acts"><button class="btn out-only" data-open="signup">Create a free account</button><button class="btn alt out-only" data-open="login">Log in</button><button class="btn in-only" data-dash>Open my dashboard</button></div>
+ </div>
+ <div class="feat">
+  <div class="card"><h3>Focus timer</h3><p>Work in 25-minute sessions with built-in breaks and a session count.</p></div>
+  <div class="card"><h3>Tasks</h3><p>Add what’s due, set a priority and tick it off when it’s done.</p></div>
+  <div class="card"><h3>Weekly timetable</h3><p>See your classes and study blocks for the whole week at a glance.</p></div>
+  <div class="card"><h3>Flashcards</h3><p>Make your own question-and-answer cards and flip through them.</p></div>
+  <div class="card"><h3>Quick notes</h3><p>Jot things down and they save automatically as you type.</p></div>
+  <div class="card"><h3>Weekly focus chart</h3><p>See how many focus sessions you finished each day this week.</p></div>
+  <div class="card"><h3>Reading list</h3><p>Keep track of the books and articles on your plate.</p></div>
+  <div class="card"><h3>Mood journal</h3><p>Check in with yourself each day and spot your patterns.</p></div>
+  <div class="card"><h3>Quiz zone</h3><p>Quizzes in 12 subjects for every grade, with timed mode, daily challenges and certificates.</p></div>
+ </div>
+</div>
+<div class="auth" id="auth" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+ <div class="card authcard">
+  <div class="logo"><span>Edu</span>Hub</div>
+  <h2 id="authTitle">Log in</h2>
+  <p class="empty" id="authSub">Pick up where you left off.</p>
+  <p style="margin:0 0 .6rem"><button type="button" class="back" id="backHome">← Back to home</button></p>
+  <form id="authForm">
+   <label class="f" data-su hidden>Name<input type="text" id="aName" autocomplete="name"></label>
+   <label class="f">Email<input type="email" id="aEmail" autocomplete="email" required></label>
+   <label class="f">Password<input type="password" id="aPw" autocomplete="current-password" required></label>
+   <label class="f" data-su hidden>Confirm password<input type="password" id="aPw2" autocomplete="new-password"></label>
+   <label class="chk"><input type="checkbox" id="aShow"> Show password</label>
+   <label class="chk" data-li><input type="checkbox" id="aRem" checked> Keep me logged in on this device</label>
+   <p class="err" id="aErr" role="alert"></p>
+   <button class="btn" id="aGo" style="width:100%">Log in</button>
+  </form>
+  <p id="swp" style="margin:1rem 0 .4rem;font-weight:500"><span id="swText">No account?</span> <button type="button" class="link" id="swBtn" style="margin-left:0;color:var(--brand)">Create one</button></p>
+  <p class="empty">Accounts and data are stored only in this browser. They don’t sync to other devices.</p>
+ </div>
+</div>
+<header><div class="bar">
+  <a class="logo" href="#" data-go="home"><span>Edu</span>Hub</a>
+  <nav aria-label="Sections"><a href="#top" id="goHome">Home</a><a href="#" data-go="home">Dashboard</a><a href="#" data-go="tasks">Tasks</a><a href="#" data-go="timetable">Timetable</a><a href="#" data-go="flashcards">Flashcards</a><a href="#" data-go="notes">Notes</a><a href="#" data-go="exams">Exams</a><a href="#" data-go="habits">Habits</a><a href="#" data-go="reading">Reading</a><a href="#" data-go="mood">Mood</a><a href="#" data-go="quiz">Quiz</a><a href="#" data-go="board">Board</a><a href="#" data-go="ai">AI</a><a href="#" data-go="tools">Tools</a><a href="#top" id="goProfile">Profile</a></nav>
+  <button class="av" id="avSmall" aria-label="Open your profile"></button><span class="who" id="who"></span><button class="btn alt" id="logout">Log out</button>
+  <button class="icon-btn" id="theme" aria-label="Switch light or dark theme">◐</button>
+</div></header>
+
+<main id="top">
+<div class="hero">
+  <div>
+    <h1>Plan it, focus, finish it.</h1>
+    <p>EduHub puts your focus timer, tasks, timetable, flashcards and notes in one place. Everything saves in your browser, so it’s ready when you come back.</p>
+    <p id="quote" style="font-style:italic;margin-top:1rem"></p>
+    <div class="stats" aria-live="polite">
+      <div><b id="sSess">0</b><small>focus sessions</small></div>
+      <div><b id="sTasks">0</b><small>tasks done</small></div>
+      
+    </div>
+  </div>
+  <div class="card timer">
+    <div class="seg" role="group" aria-label="Timer mode">
+      <button data-m="25" aria-pressed="true">Focus</button><button data-m="5" aria-pressed="false">Short break</button><button data-m="15" aria-pressed="false">Long break</button>
+    </div>
+    <div class="ring">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="t" cx="60" cy="60" r="54"/><circle class="p" id="arc" cx="60" cy="60" r="54" stroke-dasharray="339.3" stroke-dashoffset="0"/></svg>
+      <div class="time" id="clock" role="timer">25:00</div>
+    </div>
+    <div class="row" style="justify-content:center;margin:0"><button class="btn" id="go">Start</button><button class="btn alt" id="reset">Reset</button></div>
+  </div>
+</div>
+
+<div id="launch"><h2 style="font-size:1.6rem;margin:.5rem 0 1rem">Your tools</h2><div class="launch">
+ <button class="card" data-go="tasks"><b>Tasks</b><span>Add, prioritise and tick off what’s due.</span></button>
+ <button class="card" data-go="timetable"><b>Timetable</b><span>Your week of classes and study blocks.</span></button>
+ <button class="card" data-go="flashcards"><b>Flashcards</b><span>Make cards and flip through them.</span></button>
+ <button class="card" data-go="notes"><b>Notes</b><span>Quick notes that save as you type.</span></button>
+ <button class="card" data-go="exams"><b>Exam countdown</b><span>Days left until every deadline.</span></button>
+ <button class="card" data-go="habits"><b>Habit tracker</b><span>Daily habits and streaks.</span></button>
+ <button class="card" data-go="reading"><b>Reading list</b><span>Books and articles to get through.</span></button>
+ <button class="card" data-go="mood"><b>Mood journal</b><span>A daily check-in with a short note.</span></button>
+ <button class="card" data-go="quiz"><b>Quiz zone</b><span>Grades 1 to 12 and higher studies.</span></button>
+ <button class="card" data-go="board"><b>Whiteboard</b><span>Draw and solve problems.</span></button>
+ <button class="card" data-go="ai"><b>AI helper</b><span>Ask ChatGPT or Claude.</span></button>
+ <button class="card" data-go="tools"><b>Tools</b><span>Calculator, converter and Spotify.</span></button>
+</div></div>
+<section class="tool" id="insights"><h2>This week’s focus</h2><p><b id="chartTotal">0</b> focus sessions in the last 7 days.</p><div class="card"><div class="chart7" id="chart"></div></div></section>
+<section class="tool" id="tasks">
+  <h2>Tasks</h2><p>Add what’s due, tick it off when it’s done.</p>
+  <div class="card">
+    <form class="row" id="taskForm"><input type="text" id="taskIn" placeholder="e.g. Finish chemistry lab report" aria-label="New task" required>
+      <select id="taskPri" aria-label="Priority"><option value="2">Normal</option><option value="1">Urgent</option><option value="3">Later</option></select>
+      <input type="date" id="taskDue" aria-label="Due date (optional)" title="Due date (optional)"><button class="btn">Add task</button></form>
+    <div class="row"><div class="seg" id="filters"><button data-f="all" aria-pressed="true">All</button><button data-f="open" aria-pressed="false">To do</button><button data-f="done" aria-pressed="false">Done</button></div></div>
+    <div class="meter" aria-hidden="true"><i id="taskBar"></i></div>
+    <ul id="taskList"></ul>
+  </div>
+</section>
+
+<section class="tool" id="schedule">
+  <h2>Weekly timetable</h2><p>Add classes and study blocks. Click an entry to remove it.</p>
+  <div class="card">
+    <form class="row" id="slotForm">
+      <select id="slotDay" aria-label="Day"><option>Mon</option><option>Tue</option><option>Wed</option><option>Thu</option><option>Fri</option></select>
+      <input type="time" id="slotTime" aria-label="Start time" value="09:00" required>
+      <input type="text" id="slotTitle" placeholder="Class or study block" aria-label="Title" required>
+      <button class="btn">Add to week</button></form>
+    <div class="scroll"><div class="week" id="week"></div></div>
+  </div>
+</section>
+
+<div class="grid">
+<section class="tool" id="cards">
+  <h2>Flashcards</h2><p>Tap a card to flip it.</p>
+  <div class="card">
+    <button class="flash" id="flash" aria-live="polite"></button>
+    <div class="row" style="margin:.8rem 0;justify-content:space-between;align-items:center"><button class="btn alt" id="prev">Previous</button><span id="cnt" class="empty"></span><button class="btn alt" id="next">Next</button></div>
+    <form class="row" id="cardForm"><input type="text" id="cq" placeholder="Question" aria-label="Question" required><input type="text" id="ca" placeholder="Answer" aria-label="Answer" required><button class="btn">Add card</button></form>
+    <button class="x" id="delCard" type="button">Delete this card</button>
+  </div>
+</section>
+</div>
+
+<section class="tool" id="notes">
+  <h2>Quick notes</h2><p>Saves automatically as you type.</p>
+  <div class="card"><textarea id="note" placeholder="Lecture points, ideas, reminders…" aria-label="Notes"></textarea>
+  <div class="row" style="margin:.6rem 0 0;justify-content:space-between"><span class="empty" id="words">0 words</span><button class="btn alt" id="clearNote" type="button">Clear notes</button></div></div>
+</section>
+
+<div class="grid">
+<section class="tool" id="exams"><h2>Exam countdown</h2><p>Keep every deadline in sight.</p><div class="card">
+ <form class="row" id="exForm"><input type="text" id="exName" placeholder="Exam or deadline" aria-label="Name" required><input type="date" id="exDate" aria-label="Date" required><button class="btn">Add</button></form>
+ <ul id="exList"></ul></div></section>
+<section class="tool" id="habits"><h2>Habit tracker</h2><p>Tick a habit each day and build a streak.</p><div class="card">
+ <form class="row" id="hbForm"><input type="text" id="hbName" placeholder="e.g. Read 20 pages" aria-label="Habit" required><button class="btn">Add</button></form>
+ <ul id="hbList"></ul></div></section>
+</div>
+<div class="grid">
+<section class="tool" id="calc"><h2>Calculator</h2><p>Type an expression or use the keys.</p><div class="card">
+ <input type="text" id="cIn" placeholder="e.g. sqrt(16)+2^3" aria-label="Expression" autocomplete="off"><div id="cOut" aria-live="polite"></div><div class="keys" id="keys"></div></div></section>
+<section class="tool" id="music"><h2>Study music</h2><p>Open Spotify and press play. Your music, your choice.</p><div class="card">
+ <a class="spotify" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" aria-label="Open Spotify in a new tab"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#1DB954"/><g fill="none" stroke="#000" stroke-width="1.9" stroke-linecap="round"><path d="M5.2 8.4c4.4-1.3 9.4-1 13.3 1.3"/><path d="M5.9 11.9c3.7-1.1 7.9-.8 11.2 1.1"/><path d="M6.6 15.2c3-.8 6.3-.6 9 .9"/></g></svg><span>Open Spotify</span></a>
+ <p class="empty" style="margin:1rem 0 .5rem">Study playlists</p>
+ <div class="row"><a class="chip" href="https://open.spotify.com/search/deep%20focus" target="_blank" rel="noopener noreferrer">Deep Focus</a><a class="chip" href="https://open.spotify.com/search/lofi%20beats" target="_blank" rel="noopener noreferrer">Lo-fi beats</a><a class="chip" href="https://open.spotify.com/search/piano%20study" target="_blank" rel="noopener noreferrer">Piano for studying</a><a class="chip" href="https://open.spotify.com/search/classical%20focus" target="_blank" rel="noopener noreferrer">Classical focus</a></div></div></section>
+<section class="tool" id="convert"><h2>Unit converter</h2><p>Length, weight, volume and temperature.</p><div class="card">
+ <div class="row"><select id="cvCat" aria-label="Category"><option>Length</option><option>Weight</option><option>Volume</option><option>Temperature</option></select><input type="number" id="cvVal" value="1" step="any" aria-label="Value" style="flex:1"></div>
+ <div class="row"><select id="cvFrom" aria-label="From unit"></select><select id="cvTo" aria-label="To unit"></select></div>
+ <div id="cvOut" aria-live="polite" style="font-weight:800;font-size:1.4rem;overflow-wrap:anywhere"></div></div></section>
+</div>
+<section class="tool" id="reading"><h2>Reading list</h2><p>Track the books and articles you want to get through.</p><div class="card">
+ <form class="row" id="rdForm"><input type="text" id="rdTitle" placeholder="Book or article title" aria-label="Title" required><input type="text" id="rdAuthor" placeholder="Author (optional)" aria-label="Author"><button class="btn">Add</button></form>
+ <ul id="rdList"></ul></div></section>
+<section class="tool" id="mood"><h2>Mood journal</h2><p>A quick check-in: how are you feeling today?</p><div class="card">
+ <div class="seg" id="moods" role="group" aria-label="Mood"><button type="button" data-mood="1" aria-label="Very low" aria-pressed="false">😞</button><button type="button" data-mood="2" aria-label="Low" aria-pressed="false">😕</button><button type="button" data-mood="3" aria-label="Okay" aria-pressed="false">😐</button><button type="button" data-mood="4" aria-label="Good" aria-pressed="false">🙂</button><button type="button" data-mood="5" aria-label="Great" aria-pressed="false">😄</button></div>
+ <form class="row" id="mdForm" style="margin-top:.8rem"><input type="text" id="mdNote" placeholder="Anything on your mind? (optional)" aria-label="Note"><button class="btn">Save today</button></form>
+ <p class="empty" id="mdAvg"></p><ul id="mdList"></ul></div></section>
+<section class="tool" id="quiz"><h2>Quiz zone</h2><p id="qzSub">Pick your grade to start.</p>
+ <div id="qzGrades"><div id="qzTop" class="row" style="align-items:center;gap:.8rem"></div><div id="qzGradeList" class="qgrid"></div></div>
+ <div id="qzCats" hidden><div class="row" style="align-items:center"><button class="back" id="qzBackG" type="button">← Change grade</button><b id="qzGradeName"></b></div>
+  <div class="card" id="qzDaily" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.6rem"></div>
+  <label class="chk" style="margin-top:.8rem"><input type="checkbox" id="qzTimed"> Timed mode: 20 seconds for each question</label>
+  <div class="qgrid" id="qzCatList"></div></div>
+ <div id="qzPlay" class="card" hidden>
+  <div class="row" style="justify-content:space-between;align-items:center"><span id="qzInfo" class="empty"></span><span><b id="qzTime"></b> <button class="back" id="qzQuit" type="button">Quit</button></span></div>
+  <div class="meter"><i id="qzBar"></i></div>
+  <h3 id="qzQ" style="font-size:1.7rem;margin:1rem 0;overflow-wrap:anywhere"></h3>
+  <div id="qzOpts" class="qopts"></div>
+  <p id="qzFb" aria-live="polite" style="min-height:1.7em;font-weight:600;margin:.8rem 0"></p>
+  <button class="btn" id="qzNext" type="button" hidden>Next question</button></div>
+ <div id="qzDone" class="card" hidden>
+  <h3 id="qzScore" style="font-size:2rem"></h3><p id="qzMsg"></p><p id="qzDailyMsg" style="font-weight:700"></p>
+  <div class="row"><button class="btn" id="qzAgain" type="button">Try again</button><button class="btn alt" id="qzReviewBtn" type="button">Review my mistakes</button><button class="btn alt" id="qzCertBtn" type="button" hidden>Get certificate</button><button class="btn alt" id="qzCatsBtn" type="button">More quizzes</button><button class="btn alt" id="qzGradesBtn" type="button">Change grade</button></div>
+  <h3 id="qzWrongH" style="margin:1rem 0 .4rem" hidden>Questions to review</h3><ul id="qzWrong"></ul></div>
+ <div id="qzMine" hidden><div class="row" style="align-items:center"><button class="back" id="qzMineBack" type="button">← Back</button><b>My quizzes</b></div>
+  <div class="card" style="margin-top:.6rem"><h3 style="margin-bottom:.6rem">Create a quiz</h3>
+   <div class="row"><input type="text" id="cqTitle" placeholder="Quiz title" aria-label="Quiz title"></div>
+   <div class="row"><input type="text" id="cqQ" placeholder="Question" aria-label="Question"><input type="text" id="cqA" placeholder="Correct answer" aria-label="Correct answer"></div>
+   <div class="row"><input type="text" id="cqW1" placeholder="Wrong answer 1" aria-label="Wrong answer 1"><input type="text" id="cqW2" placeholder="Wrong answer 2" aria-label="Wrong answer 2"><input type="text" id="cqW3" placeholder="Wrong answer 3" aria-label="Wrong answer 3"></div>
+   <div class="row"><button class="btn alt" id="cqAdd" type="button">Add question</button><button class="btn" id="cqSave" type="button">Save quiz</button></div>
+   <ul id="cqDraft"></ul></div>
+  <div class="card" style="margin-top:1rem"><h3 style="margin-bottom:.6rem">Saved quizzes</h3><ul id="cqList"></ul>
+   <p class="empty">To share a quiz, press Share code and send the code to a friend. They paste it below.</p>
+   <textarea id="cqCode" style="min-height:70px" placeholder="Share code appears here, or paste a friend’s code" aria-label="Share code"></textarea>
+   <div class="row" style="margin:.6rem 0 0"><button class="btn alt" id="cqImport" type="button">Add quiz from code</button></div></div></div>
+</section>
+<section class="tool" id="board"><h2>Whiteboard</h2><p>Draw diagrams, solve problems and sketch ideas.</p><div class="card">
+ <div class="row" style="align-items:center"><div class="swatches" id="wbCols" role="group" aria-label="Pen colour"><button type="button" class="sw" data-col="#14213d" style="background:#14213d" aria-label="Black" aria-pressed="true"></button><button type="button" class="sw" data-col="#2b50d8" style="background:#2b50d8" aria-label="Blue" aria-pressed="false"></button><button type="button" class="sw" data-col="#d6336c" style="background:#d6336c" aria-label="Pink" aria-pressed="false"></button><button type="button" class="sw" data-col="#2e8b57" style="background:#2e8b57" aria-label="Green" aria-pressed="false"></button><button type="button" class="sw" data-col="#e4502f" style="background:#e4502f" aria-label="Orange" aria-pressed="false"></button></div>
+  <label class="chk" style="margin:0">Size <input type="range" id="wbSize" min="1" max="20" value="4" style="max-width:9rem"></label>
+  <button class="btn alt seg-btn" id="wbEraser" type="button" aria-pressed="false">Eraser</button><button class="btn alt" id="wbUndo" type="button">Undo</button><button class="btn alt" id="wbClear" type="button">Clear</button><button class="btn alt" id="wbSave" type="button">Save picture</button></div>
+ <canvas id="wbCanvas" width="1000" height="560" aria-label="Drawing board"></canvas></div></section>
+<section class="tool" id="ai"><h2>AI study helper</h2><p>Type a question, then open it in your favourite AI tool.</p><div class="card">
+ <div class="row" id="aiChips"><button type="button" class="chip" data-p="Explain this in simple words: ">Explain simply</button><button type="button" class="chip" data-p="Give me 5 practice questions with answers on: ">Practice questions</button><button type="button" class="chip" data-p="Help me understand this step by step: ">Step by step</button><button type="button" class="chip" data-notes="1">Summarise my notes</button></div>
+ <textarea id="aiQ" style="min-height:130px" placeholder="Type your question here" aria-label="Your question"></textarea>
+ <div class="row" style="margin:.8rem 0 0"><a class="btn" id="aiGpt" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Ask ChatGPT</a><a class="btn alt" id="aiClaude" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Ask Claude</a><button class="btn alt" id="aiCopy" type="button">Copy question</button></div>
+ <p class="empty" style="margin-top:1rem">These tools open in a new tab, with your question filled in where the tool allows it, and you may need to log in there. ChatGPT cannot be shown inside other websites, so it can’t be embedded here. AI can make mistakes, so check important facts with your teacher or textbook.</p></div></section>
+<section class="tool" id="contact">
+  <h2>Send feedback</h2><p>Tell us which tool you’d like next.</p>
+  <form class="card" id="fb">
+    <div class="row"><input type="text" id="fn" placeholder="Your name" aria-label="Name" required><input type="email" id="fe" placeholder="Email" aria-label="Email" required></div>
+    <textarea id="fm" style="min-height:100px" placeholder="Your idea" aria-label="Message" required></textarea>
+    <div class="row" style="margin:.6rem 0 0"><button class="btn">Send feedback</button></div>
+  </form>
+</section>
+</main>
+
+<main id="profilePage">
+ <div class="pphead"><h2>Your profile</h2><button class="back" id="ppBack" type="button">← Back to dashboard</button></div>
+ <div class="grid">
+  <div class="card">
+   <div class="avrow"><div class="av big" id="avBig"></div><div>
+    <div class="row" style="margin:0"><label class="btn alt" for="avFile" style="cursor:pointer">Upload photo</label><input type="file" id="avFile" accept="image/*" hidden><button class="btn alt" type="button" id="avClear">Remove</button></div>
+    <div class="swatches" id="avColors" role="group" aria-label="Avatar colour"></div></div></div>
+   <form id="pForm">
+    <label class="f">Full name<input type="text" id="pName" required></label>
+    <label class="f">Email<input type="email" id="pEmail" readonly></label>
+    <label class="f">School or university<input type="text" id="pSchool"></label>
+    <div class="row2"><label class="f">Course or major<input type="text" id="pMajor"></label><label class="f">Year<select id="pYear"><option value="">Select</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Graduate</option><option>Other</option></select></label></div>
+    <label class="f">About you<textarea id="pBio" style="min-height:90px" placeholder="Goals, interests, favourite subjects…"></textarea></label>
+    <button class="btn">Save profile</button>
+   </form>
+  </div>
+  <div style="display:grid;gap:1.2rem;align-content:start">
+   <div class="card"><h3>Your progress</h3>
+    <div class="pstats"><div><b id="pSess">0</b><small>focus sessions</small></div><div><b id="pTasks">0</b><small>tasks done</small></div><div><b id="pSince">–</b><small>member since</small></div></div></div>
+   <div class="card"><h3>Appearance</h3>
+    <p class="empty">Colour theme</p><div class="themes" id="themes"></div>
+    <p class="empty">Style</p><div class="seg" id="styles"><button type="button" data-s="modern">Modern</button><button type="button" data-s="classic">Classic</button><button type="button" data-s="sharp">Sharp</button></div></div>
+   <form class="card" id="pwForm"><h3 style="margin-bottom:.8rem">Change password</h3>
+    <label class="f">Current password<input type="password" id="cpOld" autocomplete="current-password" required></label>
+    <label class="f">New password<input type="password" id="cpNew" autocomplete="new-password" required></label>
+    <p class="err" id="cpErr" role="alert"></p><button class="btn alt">Update password</button></form>
+  </div>
+ </div>
+</main>
+<footer>EduHub · built with HTML, CSS and JavaScript. Your data stays in this browser.<button class="link" data-go="feedback">Send feedback</button><button class="link" id="delAcc">Delete my account</button></footer>
+<div id="cert" class="cert" hidden role="dialog" aria-modal="true" aria-label="Certificate"><div><div class="certbox"><p style="letter-spacing:.2em;margin:0">EDUHUB QUIZ ZONE</p><h2 style="font-size:2.4rem;margin:.6rem 0">Certificate of Achievement</h2><p style="margin:0">This certificate is proudly presented to</p><p id="certName" style="font:800 2.2rem 'Bricolage Grotesque',Georgia,serif;margin:.6rem 0;overflow-wrap:anywhere"></p><p id="certLine" style="font-size:1.2rem"></p><p id="certDate" style="margin-top:1.5rem"></p></div><div class="row certacts" style="justify-content:center;margin-top:1rem"><button class="btn" id="certPrint" type="button">Print or save as PDF</button><button class="btn alt" id="certClose" type="button">Close</button></div></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* storage and hashing fallbacks so the site still works where the browser blocks them */
+let WN={};try{WN=JSON.parse(window.name||'{}')||{}}catch(e){WN={}}
+function mkStore(get,tag){let real=null;try{real=get();real.setItem('__t','1');real.removeItem('__t')}catch(e){real=null}
+  if(real)return real;const o=WN[tag]=WN[tag]||{};const sync=()=>{try{window.name=JSON.stringify(WN)}catch(e){}};
+  return{getItem:k=>k in o?o[k]:null,setItem:(k,v)=>{o[k]=String(v);sync()},removeItem:k=>{delete o[k];sync()},_keys:()=>Object.keys(o)}}
+const LS=mkStore(()=>window.localStorage,'l'),SS=mkStore(()=>window.sessionStorage,'s');
+const HAS=!!(window.crypto&&crypto.subtle&&crypto.subtle.importKey),ALG=HAS?'p':'s';
+const rnd=n=>{const a=new Uint8Array(n);try{crypto.getRandomValues(a)}catch(e){for(let i=0;i<n;i++)a[i]=Math.random()*256}return a};
+const K=[],H0=[];for(let n=2,c=0;c<64;n++){let ok=true;for(let d=2;d*d<=n;d++)if(n%d===0){ok=false;break}if(ok){if(c<8)H0[c]=(Math.sqrt(n)%1)*4294967296|0;K[c]=(Math.cbrt(n)%1)*4294967296|0;c++}}
+function sha256(bytes){const l=bytes.length,n=((l+9+63)>>6)<<6,m=new Uint8Array(n);m.set(bytes);m[l]=128;
+  const dv=new DataView(m.buffer);dv.setUint32(n-4,(l*8)>>>0);dv.setUint32(n-8,Math.floor(l*8/4294967296));
+  let h=H0.slice();const w=new Int32Array(64);
+  for(let i=0;i<n;i+=64){for(let t=0;t<16;t++)w[t]=dv.getInt32(i+t*4);
+    for(let t=16;t<64;t++){const a=w[t-15],b=w[t-2];const s0=(a>>>7|a<<25)^(a>>>18|a<<14)^(a>>>3),s1=(b>>>17|b<<15)^(b>>>19|b<<13)^(b>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)|0}
+    let [a,b,c,d,e,f,g,q]=h;
+    for(let t=0;t<64;t++){const S1=(e>>>6|e<<26)^(e>>>11|e<<21)^(e>>>25|e<<7),ch=(e&f)^(~e&g),t1=(q+S1+ch+K[t]+w[t])|0,S0=(a>>>2|a<<30)^(a>>>13|a<<19)^(a>>>22|a<<10),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0;q=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0}
+    h=[h[0]+a|0,h[1]+b|0,h[2]+c|0,h[3]+d|0,h[4]+e|0,h[5]+f|0,h[6]+g|0,h[7]+q|0]}
+  const out=new Uint8Array(32),ov=new DataView(out.buffer);h.forEach((x,i)=>ov.setInt32(i*4,x));return out}
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+/* storage: per-account namespace (theme is shared) */
+let NS='sh_anon_';
+const pk=k=>(k==='theme'||k==='style'?'sh_':NS)+k;
+const load=(k,d)=>{try{const v=LS.getItem(pk(k));return v?JSON.parse(v):d}catch(e){return d}};
+const save=(k,v)=>{try{LS.setItem(pk(k),JSON.stringify(v))}catch(e){}};
+
+/* authentication (accounts live in this browser only) */
+const G={get(k,d){try{const v=LS.getItem('sh_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{LS.setItem('sh_'+k,JSON.stringify(v))}catch(e){}}};
+const users=()=>G.get('users',{});
+const getSess=()=>{try{return JSON.parse(SS.getItem('sh_session')||LS.getItem('sh_session')||'null')}catch(e){return null}};
+let me=getSess();
+if(me&&users()[me.email]){NS='sh_u_'+me.email+'_';document.body.classList.remove('locked');$('#who').textContent=users()[me.email].name}else me=null;
+const enc=new TextEncoder();
+const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b)));
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function hashPw(pw,salt,alg){alg=alg||ALG;if(alg==='p'){const k=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']);return b64(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt,iterations:200000},k,256))}
+  let x=sha256(new Uint8Array([...enc.encode(pw),...salt]));for(let i=0;i<20000;i++)x=sha256(new Uint8Array([...x,...salt]));return b64(x)}
+let fails=0,until=0,mode='login';
+async function signup(name,email,pw){email=email.trim().toLowerCase();const u=users();if(u[email])throw 'An account with this email already exists. Log in instead.';const salt=rnd(16);u[email]={name:name.trim(),salt:b64(salt),alg:ALG,hash:await hashPw(pw,salt,ALG),created:Date.now()};G.set('users',u);return email}
+async function login(email,pw){email=email.trim().toLowerCase();if(Date.now()<until)throw 'Too many attempts. Try again in '+Math.ceil((until-Date.now())/1000)+' seconds.';const u=users()[email];if(u&&(u.alg||'p')==='p'&&!HAS)throw 'This account was created in a different browser mode. Please sign up again here.';const ok=u&&(await hashPw(pw,unb64(u.salt),u.alg||'p'))===u.hash;if(!ok){if(++fails>=5){until=Date.now()+30000;fails=0}throw 'Email or password is incorrect.'}fails=0;return email}
+function startSession(email,remember){const s=JSON.stringify({email});try{SS.removeItem('sh_session');LS.removeItem('sh_session');(remember?LS:SS).setItem('sh_session',s)}catch(e){}location.reload()}
+function doLogout(){try{SS.removeItem('sh_session');LS.removeItem('sh_session')}catch(e){}location.reload()}
+function setMode(m){mode=m;const su=m==='signup';$('#swText').textContent=su?'Already have an account?':'No account?';$('#swBtn').textContent=su?'Log in':'Create one';$$('[data-su]').forEach(x=>x.hidden=!su);$$('[data-li]').forEach(x=>x.hidden=su);$('#aName').required=su;$('#aPw2').required=su;$('#aPw').autocomplete=su?'new-password':'current-password';$('#authTitle').textContent=su?'Create your account':'Log in';$('#authSub').textContent=su?'Free, and it takes under a minute.':'Pick up where you left off.';$('#aGo').textContent=su?'Create account':'Log in';$('#aErr').textContent=''}
+function openAuth(m){document.body.classList.add('authing');setMode(m);window.scrollTo(0,0);setTimeout(()=>$(m==='signup'?'#aName':'#aEmail').focus(),0)}
+function closeAuth(){document.body.classList.remove('authing');$('#aErr').textContent=''}
+$$('[data-open]').forEach(b=>b.onclick=()=>openAuth(b.dataset.open));
+$('#swBtn').onclick=()=>setMode(mode==='login'?'signup':'login');
+$('#backHome').onclick=closeAuth;
+$('#goHome').onclick=e=>{e.preventDefault();document.body.classList.remove('viewprofile');document.body.classList.add('viewhome');window.scrollTo(0,0)};
+$$('[data-dash]').forEach(b=>b.onclick=()=>{document.body.classList.remove('viewhome');window.scrollTo(0,0)});
+$$('[data-logout]').forEach(b=>b.onclick=doLogout);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('authing'))closeAuth()});
+$('#aShow').onchange=e=>{$('#aPw').type=$('#aPw2').type=e.target.checked?'text':'password'};
+$('#authForm').onsubmit=async e=>{e.preventDefault();const err=$('#aErr'),btn=$('#aGo'),pw=$('#aPw').value;err.textContent='';
+  try{
+    
+    btn.disabled=true;let key;
+    if(mode==='signup'){
+      if(!$('#aName').value.trim())throw 'Enter your name.';
+      if(pw.length<8||!/[a-z]/i.test(pw)||!/\d/.test(pw))throw 'Use at least 8 characters, with a letter and a number.';
+      if(pw!==$('#aPw2').value)throw 'The passwords don’t match.';
+      key=await signup($('#aName').value,$('#aEmail').value,pw);startSession(key,true);
+    }else{key=await login($('#aEmail').value,pw);startSession(key,$('#aRem').checked)}
+  }catch(x){err.textContent=typeof x==='string'?x:'Something went wrong. Try again.';btn.disabled=false}};
+$('#logout').onclick=doLogout;
+$('#delAcc').onclick=()=>{if(!me||!confirm('Delete your account and all its saved data on this device? This can’t be undone.'))return;const u=users();delete u[me.email];G.set('users',u);try{(LS._keys?LS._keys():Object.keys(LS)).filter(k=>k.startsWith(NS)).forEach(k=>LS.removeItem(k))}catch(e){}doLogout()};
+if(me){$('#fn').value=users()[me.email].name;$('#fe').value=me.email}else $('#aEmail').focus();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200)}
+
+/* theme */
+const root=document.documentElement;
+const th=load('theme',null);if(th)root.dataset.theme=th;
+root.dataset.style=load('style','modern');
+const THEMES=[['auto','Auto','#f3f6fb','#2b50d8','#ffb703'],['light','Light','#f3f6fb','#2b50d8','#ffb703'],['dark','Dark','#0f1830','#7c9bff','#ffc83d'],['ocean','Ocean','#e8f5f7','#0a8fa8','#ff9f43'],['sunset','Sunset','#fff1e8','#e4502f','#ffbe3d'],['forest','Forest','#eaf4ea','#2e8b57','#e9c46a'],['grape','Grape','#1d1230','#b388ff','#ffd166']];
+function renderThemes(){const cur=root.dataset.theme||'auto';$('#themes').innerHTML=THEMES.map(t=>`<button type="button" class="th" data-t="${t[0]}" aria-pressed="${cur===t[0]}"><span class="dots"><i style="background:${t[2]}"></i><i style="background:${t[3]}"></i><i style="background:${t[4]}"></i></span>${t[1]}</button>`).join('');$$('#styles button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===root.dataset.style))}
+function setTheme(t){if(t==='auto'){delete root.dataset.theme;save('theme',null)}else{root.dataset.theme=t;save('theme',t)}renderThemes()}
+function setStyle(s){root.dataset.style=s;save('style',s);renderThemes()}
+$('#theme').onclick=()=>{const dk=['dark','grape'].includes(root.dataset.theme)||(!root.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);setTheme(dk?'light':'dark')};
+$('#themes').onclick=e=>{const b=e.target.closest('[data-t]');if(b)setTheme(b.dataset.t)};
+$('#styles').onclick=e=>{const b=e.target.closest('[data-s]');if(b)setStyle(b.dataset.s)};
+
+/* profile */
+const COLORS=['#2b50d8','#0a8fa8','#2e8b57','#e4502f','#8e44ad','#d6336c'];
+let prof={school:'',major:'',year:'',bio:'',color:COLORS[0],photo:'',...load('profile',{})};
+const initials=n=>n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
+function paintAv(el){const n=users()[me.email].name;el.style.backgroundColor=prof.color;el.style.backgroundImage=prof.photo?`url(${prof.photo})`:'none';el.textContent=prof.photo?'':initials(n)}
+function paintAll(){if(me){paintAv($('#avSmall'));paintAv($('#avBig'))}}
+function fillProfile(){const r=users()[me.email];$('#pName').value=r.name;$('#pEmail').value=me.email;$('#pSchool').value=prof.school;$('#pMajor').value=prof.major;$('#pYear').value=prof.year;$('#pBio').value=prof.bio;$('#pSess').textContent=sessions;$('#pTasks').textContent=tasks.filter(t=>t.d).length;$('#pSince').textContent=new Date(r.created).toLocaleDateString(undefined,{month:'short',year:'numeric'});$('#avColors').innerHTML=COLORS.map(c=>`<button type="button" class="sw" data-c="${c}" style="background:${c}" aria-label="Avatar colour ${c}" aria-pressed="${prof.color===c}"></button>`).join('');paintAll();renderThemes()}
+function openProfile(){document.body.classList.add('viewprofile');fillProfile();window.scrollTo(0,0)}
+function closeProfile(){document.body.classList.remove('viewprofile')}
+$('#goProfile').onclick=e=>{e.preventDefault();openProfile()};$('#avSmall').onclick=openProfile;
+$('#ppBack').onclick=()=>{closeProfile();window.scrollTo(0,0)};
+document.querySelector('nav[aria-label="Sections"]').addEventListener('click',e=>{const a=e.target.closest('a');if(a&&a.id!=='goProfile'&&a.id!=='goHome')closeProfile()});
+$('#avColors').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;prof.color=b.dataset.c;save('profile',prof);$$('#avColors .sw').forEach(x=>x.setAttribute('aria-pressed',x===b));paintAll()};
+$('#avClear').onclick=()=>{prof.photo='';save('profile',prof);paintAll()};
+$('#avFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=160;const s=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,160,160);prof.photo=c.toDataURL('image/jpeg',.8);save('profile',prof);paintAll()};im.src=r.result};r.readAsDataURL(f);e.target.value=''};
+$('#pForm').onsubmit=e=>{e.preventDefault();const u=users();u[me.email].name=$('#pName').value.trim();G.set('users',u);Object.assign(prof,{school:$('#pSchool').value.trim(),major:$('#pMajor').value.trim(),year:$('#pYear').value,bio:$('#pBio').value.trim()});save('profile',prof);$('#who').textContent=u[me.email].name;$('#fn').value=u[me.email].name;paintAll();toast('Profile saved')};
+$('#pwForm').onsubmit=async e=>{e.preventDefault();const er=$('#cpErr');er.textContent='';try{const u=users(),r=u[me.email];if((await hashPw($('#cpOld').value,unb64(r.salt),r.alg||'p'))!==r.hash)throw 'Current password is incorrect.';const n=$('#cpNew').value;if(n.length<8||!/[a-z]/i.test(n)||!/\d/.test(n))throw 'Use at least 8 characters, with a letter and a number.';const salt=rnd(16);r.salt=b64(salt);r.alg=ALG;r.hash=await hashPw(n,salt,ALG);G.set('users',u);e.target.reset();toast('Password updated')}catch(x){er.textContent=typeof x==='string'?x:'Could not update password.'}};
+renderThemes();paintAll();
+
+/* timer */
+let mins=25,left=1500,run=null,sessions=load('sessions',0);
+const C=339.3;
+function draw(){const m=String(Math.floor(left/60)).padStart(2,'0'),s=String(left%60).padStart(2,'0');$('#clock').textContent=m+':'+s;$('#arc').style.strokeDashoffset=C*(1-left/(mins*60));document.title=run?`${m}:${s} · EduHub`:'EduHub – your student toolkit';$('#sSess').textContent=sessions}
+function stop(){clearInterval(run);run=null;$('#go').textContent='Start'}
+$('#go').onclick=()=>{if(run){stop();draw();return}$('#go').textContent='Pause';run=setInterval(()=>{left--;if(left<=0){left=0;const focus=mins===25;stop();if(focus){sessions++;save('sessions',sessions);logSess();toast('Focus session complete. Take a break.')}else toast('Break over. Ready to focus?');left=mins*60}draw()},1000)};
+$('#reset').onclick=()=>{stop();left=mins*60;draw()};
+$$('.seg [data-m]').forEach(b=>b.onclick=()=>{$$('.seg [data-m]').forEach(x=>x.setAttribute('aria-pressed',x===b));mins=+b.dataset.m;stop();left=mins*60;draw()});
+
+/* tasks */
+let tasks=load('tasks',[{t:'Plan this week’s study blocks',p:2,d:false}]),filter='all';
+const pl={1:'Urgent',2:'Normal',3:'Later'};
+function renderTasks(){
+  const list=tasks.map((x,i)=>({...x,i})).filter(x=>filter==='all'||(filter==='done')===x.d).sort((a,b)=>a.d-b.d||a.p-b.p||(a.due||'9').localeCompare(b.due||'9'));
+  $('#taskList').innerHTML=list.length?list.map(x=>`<li class="task ${x.d?'done':''}"><input type="checkbox" data-i="${x.i}" ${x.d?'checked':''} aria-label="Mark done"><span>${esc(x.t)} <small style="color:var(--muted)">· ${pl[x.p]}</small>${dueTxt(x)}</span><button class="x" data-del="${x.i}" aria-label="Delete task">✕</button></li>`).join(''):'<li class="empty">Nothing here yet. Add a task above.</li>';
+  const done=tasks.filter(t=>t.d).length;
+  $('#taskBar').style.width=(tasks.length?done/tasks.length*100:0)+'%';$('#sTasks').textContent=done;save('tasks',tasks)}
+$('#taskForm').onsubmit=e=>{e.preventDefault();tasks.push({t:$('#taskIn').value.trim(),p:+$('#taskPri').value,d:false,due:$('#taskDue').value});$('#taskIn').value='';$('#taskDue').value='';renderTasks()};
+$('#taskList').onclick=e=>{const c=e.target.dataset;if(c.del!==undefined){tasks.splice(+c.del,1);renderTasks()}};
+$('#taskList').onchange=e=>{const i=e.target.dataset.i;if(i!==undefined){tasks[+i].d=e.target.checked;renderTasks()}};
+$$('#filters button').forEach(b=>b.onclick=()=>{$$('#filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));filter=b.dataset.f;renderTasks()});
+
+/* timetable */
+let slots=load('slots',[{d:'Mon',t:'09:00',n:'Calculus lecture'},{d:'Wed',t:'14:00',n:'Library study block'}]);
+function renderWeek(){
+  $('#week').innerHTML=['Mon','Tue','Wed','Thu','Fri'].map(d=>{const s=slots.map((x,i)=>({...x,i})).filter(x=>x.d===d).sort((a,b)=>a.t.localeCompare(b.t));
+    return `<div class="day"><h3>${d}</h3>${s.map(x=>`<div class="slot" data-i="${x.i}" tabindex="0" role="button" title="Remove"><small>${x.t}</small>${esc(x.n)}</div>`).join('')||'<div class="empty">Free</div>'}</div>`}).join('');
+  save('slots',slots)}
+$('#slotForm').onsubmit=e=>{e.preventDefault();slots.push({d:$('#slotDay').value,t:$('#slotTime').value,n:$('#slotTitle').value.trim()});$('#slotTitle').value='';renderWeek()};
+const rmSlot=e=>{const s=e.target.closest('.slot');if(s){slots.splice(+s.dataset.i,1);renderWeek();toast('Entry removed')}};
+$('#week').onclick=rmSlot;$('#week').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();rmSlot(e)}};
+
+/* flashcards */
+let deck=load('deck',[{q:'What is the powerhouse of the cell?',a:'The mitochondrion'},{q:'Derivative of sin(x)?',a:'cos(x)'}]),ci=0,flip=false;
+function renderCard(){const f=$('#flash');if(!deck.length){f.textContent='No cards yet. Add one below.';f.classList.remove('back');$('#cnt').textContent='';return}
+  ci=Math.min(ci,deck.length-1);f.textContent=flip?deck[ci].a:deck[ci].q;f.classList.toggle('back',flip);$('#cnt').textContent=`${ci+1} of ${deck.length}`;save('deck',deck)}
+$('#flash').onclick=()=>{flip=!flip;renderCard()};
+$('#next').onclick=()=>{if(deck.length){ci=(ci+1)%deck.length;flip=false;renderCard()}};
+$('#prev').onclick=()=>{if(deck.length){ci=(ci-1+deck.length)%deck.length;flip=false;renderCard()}};
+$('#cardForm').onsubmit=e=>{e.preventDefault();deck.push({q:$('#cq').value.trim(),a:$('#ca').value.trim()});ci=deck.length-1;flip=false;e.target.reset();renderCard();toast('Card added')};
+$('#delCard').onclick=()=>{if(deck.length){deck.splice(ci,1);flip=false;renderCard()}};
+
+/* notes */
+const note=$('#note');note.value=load('note','');
+function words(){const w=note.value.trim().split(/\s+/).filter(Boolean).length;$('#words').textContent=w+(w===1?' word':' words')}
+note.oninput=()=>{save('note',note.value);words()};
+$('#clearNote').onclick=()=>{if(note.value&&confirm('Clear all notes?')){note.value='';save('note','');words()}};
+
+/* feedback */
+$('#fb').onsubmit=e=>{e.preventDefault();e.target.reset();toast('Thanks! Your feedback was recorded on this device.')};
+
+/* study tip */
+const TIPS=['Test yourself instead of rereading. Recalling an answer beats reviewing it.','Study in short bursts and take real breaks.','Start with the hardest subject while your energy is high.','Explain a topic out loud as if you were teaching a friend.','Spread revision over several days instead of one long night.','Put your phone in another room while you focus.','Write down tomorrow’s top three tasks before you stop for the day.','Sleep is part of studying: memories settle overnight.','Mix practice problems from different topics to learn faster.','Make a small start. Five minutes is enough to build momentum.'];
+$('#quote').textContent='Study tip: '+TIPS[Math.floor(Date.now()/864e5)%TIPS.length];
+
+/* exam countdown */
+let exams=load('exams',[]);
+const dayMs=864e5,midnight=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+function renderExams(){const t=midnight();const list=exams.map((x,i)=>({...x,i,left:Math.round((new Date(x.d+'T00:00')-t)/dayMs)})).sort((a,b)=>a.left-b.left);
+  $('#exList').innerHTML=list.length?list.map(x=>`<li class="task"><span>${esc(x.n)} <small style="color:var(--muted)">· ${esc(x.d)}</small></span><b class="cd" style="color:${x.left>=0&&x.left<=3?'var(--bad)':'var(--ok)'}">${x.left<0?'Passed':x.left===0?'Today':x.left+(x.left===1?' day':' days')}</b><button class="x" data-xd="${x.i}" aria-label="Delete">✕</button></li>`).join(''):'<li class="empty">No exams yet. Add one above.</li>';save('exams',exams)}
+$('#exForm').onsubmit=e=>{e.preventDefault();exams.push({n:$('#exName').value.trim(),d:$('#exDate').value});e.target.reset();renderExams()};
+$('#exList').onclick=e=>{if(e.target.dataset.xd!==undefined){exams.splice(+e.target.dataset.xd,1);renderExams()}};
+
+/* habits */
+const dstr=d=>d.toLocaleDateString('en-CA');
+let habits=load('habits',[{n:'Review notes',d:[]}]);
+function streak(h){let n=0,d=new Date();if(!h.d.includes(dstr(d)))d.setDate(d.getDate()-1);while(h.d.includes(dstr(d))){n++;d.setDate(d.getDate()-1)}return n}
+function renderHabits(){const t=dstr(new Date());$('#hbList').innerHTML=habits.length?habits.map((h,i)=>`<li class="task"><input type="checkbox" data-h="${i}" ${h.d.includes(t)?'checked':''} aria-label="Done today"><span>${esc(h.n)} <small style="color:var(--muted)">· ${streak(h)}-day streak</small></span><button class="x" data-hd="${i}" aria-label="Delete habit">✕</button></li>`).join(''):'<li class="empty">No habits yet. Add one above.</li>';save('habits',habits)}
+$('#hbForm').onsubmit=e=>{e.preventDefault();habits.push({n:$('#hbName').value.trim(),d:[]});e.target.reset();renderHabits()};
+$('#hbList').onchange=e=>{const i=e.target.dataset.h;if(i===undefined)return;const h=habits[+i],t=dstr(new Date());h.d=e.target.checked?[...new Set([...h.d,t])]:h.d.filter(x=>x!==t);renderHabits()};
+$('#hbList').onclick=e=>{if(e.target.dataset.hd!==undefined){habits.splice(+e.target.dataset.hd,1);renderHabits()}};
+
+/* calculator (whitelisted expressions only) */
+function calc(s){s=s.toLowerCase().replace(/π/g,'pi').replace(/\^/g,'**').replace(/(\d)%/g,'($1/100)');
+  if(!/^[0-9a-z+\-*/().\s]*$/.test(s))throw 0;
+  if((s.match(/[a-z]+/g)||[]).some(i=>!['sin','cos','tan','sqrt','log','ln','pi','abs'].includes(i)))throw 0;
+  s=s.replace(/\b(sin|cos|tan|sqrt|abs)\b/g,'Math.$1').replace(/\bln\b/g,'Math.log').replace(/\blog\b/g,'Math.log10').replace(/\bpi\b/g,'Math.PI');
+  const v=Function('"use strict";return ('+s+')')();if(typeof v!=='number'||!isFinite(v))throw 0;return +v.toPrecision(12)}
+const KEYS=['sin(','cos(','tan(','sqrt(','7','8','9','/','4','5','6','*','1','2','3','-','0','.','^','+','(',')','pi','log(','C','⌫','ln(','='];
+$('#keys').innerHTML=KEYS.map(k=>`<button type="button" data-k="${k}" class="${k.length===1&&'+-*/^='.includes(k)?'op':''}">${k==='*'?'×':k==='/'?'÷':k}</button>`).join('');
+const cIn=$('#cIn'),cOut=$('#cOut');
+function doCalc(){try{cOut.textContent='= '+calc(cIn.value)}catch(e){cOut.textContent='Check the expression'}}
+$('#keys').onclick=e=>{const k=e.target.dataset.k;if(k===undefined)return;if(k==='C'){cIn.value='';cOut.textContent=''}else if(k==='⌫')cIn.value=cIn.value.slice(0,-1);else if(k==='=')doCalc();else cIn.value+=k};
+cIn.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();doCalc()}};
+
+/* due dates, weekly chart, reading list, mood journal, converter */
+function dueTxt(x){if(!x.due)return '';const left=Math.round((new Date(x.due+'T00:00')-midnight())/864e5);const t=left<0?'overdue':left===0?'due today':left===1?'due tomorrow':'due in '+left+' days';return ' <small style="color:'+(!x.d&&left<=0?'var(--bad)':'var(--muted)')+'">· '+t+'</small>'}
+let sessionLog=load('sessionLog',{});
+function logSess(){const k=dstr(new Date());sessionLog[k]=(sessionLog[k]||0)+1;save('sessionLog',sessionLog);renderChart()}
+function renderChart(){const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d)}
+  const vals=days.map(d=>sessionLog[dstr(d)]||0),max=Math.max(4,...vals);
+  $('#chart').innerHTML=days.map((d,i)=>`<div class="bar7"><span>${vals[i]}</span><div class="tr"><i style="height:${vals[i]/max*100}%"></i></div><small>${d.toLocaleDateString(undefined,{weekday:'short'})}</small></div>`).join('');
+  $('#chartTotal').textContent=vals.reduce((a,b)=>a+b,0)}
+const RS=['To read','Reading','Finished'];let books=load('books',[]);
+function renderReading(){const ord={'Reading':0,'To read':1,'Finished':2};const list=books.map((b,i)=>({...b,i})).sort((a,b)=>ord[a.s]-ord[b.s]);
+  $('#rdList').innerHTML=list.length?list.map(b=>`<li class="task ${b.s==='Finished'?'done':''}"><span>${esc(b.t)}${b.a?` <small style="color:var(--muted)">· ${esc(b.a)}</small>`:''}</span><select data-rs="${b.i}" aria-label="Status">${RS.map(x=>`<option ${x===b.s?'selected':''}>${x}</option>`).join('')}</select><button class="x" data-rd="${b.i}" aria-label="Delete">✕</button></li>`).join(''):'<li class="empty">Nothing here yet. Add your first book or article.</li>';save('books',books)}
+$('#rdForm').onsubmit=e=>{e.preventDefault();books.push({t:$('#rdTitle').value.trim(),a:$('#rdAuthor').value.trim(),s:'To read'});e.target.reset();renderReading()};
+$('#rdList').onchange=e=>{const i=e.target.dataset.rs;if(i!==undefined){books[+i].s=e.target.value;renderReading()}};
+$('#rdList').onclick=e=>{if(e.target.dataset.rd!==undefined){books.splice(+e.target.dataset.rd,1);renderReading()}};
+const MOODS=['','😞','😕','😐','🙂','😄'];let moods=load('moods',[]),pick=0;
+function renderMood(){const t=dstr(new Date()),today=moods.find(x=>x.d===t);if(!pick&&today)pick=today.m;
+  $$('#moods button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.mood===pick));
+  const list=[...moods].sort((a,b)=>b.d.localeCompare(a.d)).slice(0,14);
+  $('#mdList').innerHTML=list.length?list.map(x=>`<li class="task"><span>${MOODS[x.m]} <b>${x.d}</b>${x.n?' · '+esc(x.n):''}</span><button class="x" data-md="${x.d}" aria-label="Delete entry">✕</button></li>`).join(''):'<li class="empty">No check-ins yet.</li>';
+  const wk=moods.filter(x=>(new Date()-new Date(x.d+'T00:00'))/864e5<7);
+  $('#mdAvg').textContent=wk.length?'7-day average: '+(wk.reduce((a,x)=>a+x.m,0)/wk.length).toFixed(1)+' out of 5':'';save('moods',moods)}
+$('#moods').onclick=e=>{const b=e.target.closest('[data-mood]');if(b){pick=+b.dataset.mood;renderMood()}};
+$('#mdForm').onsubmit=e=>{e.preventDefault();if(!pick){toast('Pick a mood first');return}const t=dstr(new Date());moods=moods.filter(x=>x.d!==t);moods.push({d:t,m:pick,n:$('#mdNote').value.trim()});$('#mdNote').value='';renderMood();toast('Check-in saved')};
+$('#mdList').onclick=e=>{const d=e.target.dataset.md;if(d){moods=moods.filter(x=>x.d!==d);renderMood()}};
+const UNITS={Length:{mm:.001,cm:.01,m:1,km:1000,in:.0254,ft:.3048,yd:.9144,mi:1609.344},Weight:{g:.001,kg:1,oz:.028349523125,lb:.45359237},Volume:{ml:.001,l:1,cup:.2365882365,gal:3.785411784},Temperature:{C:1,F:1,K:1}};
+function conv(){const cat=$('#cvCat').value,v=parseFloat($('#cvVal').value),f=$('#cvFrom').value,t=$('#cvTo').value;if(isNaN(v)){$('#cvOut').textContent='';return}
+  let r;if(cat==='Temperature'){const c=f==='C'?v:f==='F'?(v-32)*5/9:v-273.15;r=t==='C'?c:t==='F'?c*9/5+32:c+273.15}else r=v*UNITS[cat][f]/UNITS[cat][t];
+  $('#cvOut').textContent=v+' '+f+' = '+(+r.toPrecision(8))+' '+t}
+function fillUnits(){const u=Object.keys(UNITS[$('#cvCat').value]);const o=u.map(x=>`<option>${x}</option>`).join('');$('#cvFrom').innerHTML=o;$('#cvTo').innerHTML=o;$('#cvTo').selectedIndex=Math.min(1,u.length-1);conv()}
+$('#cvCat').onchange=fillUnits;['#cvVal','#cvFrom','#cvTo'].forEach(q=>{$(q).oninput=conv;$(q).onchange=conv});
+renderChart();renderReading();renderMood();fillUnits();
+
+/* quiz zone: 13 levels x 10 categories x 50 questions, all generated by code */
+let R=Math.random;
+const ri=(a,b)=>a+Math.floor(R()*(b-a+1)),pc=a=>a[Math.floor(R()*a.length)],gcd=(a,b)=>b?gcd(b,a%b):a;
+const fr=(n,d)=>{const g=gcd(Math.abs(n),d);n/=g;d/=g;return d===1?''+n:n+'/'+d};
+const sg=n=>n<0?'− '+(-n):'+ '+n;
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const ncr=(n,r)=>{let x=1;for(let i=1;i<=r;i++)x=x*(n-r+i)/i;return Math.round(x)},fact=n=>n<2?1:n*fact(n-1);
+const NM=['Asha','Ravi','Meera','Arjun','Sana','Kiran','Nila','Dev'],IT=['apples','pencils','books','stickers','marbles','balloons'],DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],AB='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const WORDS=['CAT','DOG','SUN','MOON','STAR','BOOK','TREE','FISH','BIRD','RAIN','SNOW','WIND','LAMP','DESK','CAKE','MILK','LION','FROG','BOAT','KITE','RING','DRUM','LEAF','SAND','HILL','ROSE','PLAN','MAP','PEN','BAG'];
+const PRIMES=[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97],TR=[[3,4,5],[5,12,13],[8,15,17],[7,24,25]],POLY={triangle:3,square:4,pentagon:5,hexagon:6,octagon:8};
+const shift=(w,k)=>[...w].map(c=>AB[(AB.indexOf(c)+k+26)%26]).join('');
+const seq=(a,d,n)=>Array.from({length:n},(_,i)=>a+i*d).join(', ');
+const hm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'),du=m=>m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+m%60+' min':'');
+const GEN=[
+/* 0 Arithmetic */ L=>{const o=R()<.5;let a,b,c,d;
+ if(L<2){a=ri(1,9);b=ri(1,9);return o?[`${a} + ${b}`,a+b]:[`${a+b} − ${a}`,b]}
+ if(L<3){a=ri(10,70);b=ri(2,29);return o?[`${a} + ${b}`,a+b]:[`${a+b} − ${b}`,a]}
+ if(L<7){const m=L<5?[100,999]:[1000,99999];a=ri(...m);b=ri(...m);return o?[`${a} + ${b}`,a+b]:[`${Math.max(a,b)} − ${Math.min(a,b)}`,Math.abs(a-b)]}
+ if(L<9){a=ri(100,9999)/100;b=ri(100,9999)/100;return o?[`${a.toFixed(2)} + ${b.toFixed(2)}`,(a+b).toFixed(2)]:[`${Math.max(a,b).toFixed(2)} − ${Math.min(a,b).toFixed(2)}`,Math.abs(a-b).toFixed(2)]}
+ if(L<11){a=ri(-30,30);b=ri(-30,30);return o?[`(${a}) + (${b})`,a+b]:[`(${a}) − (${b})`,a-b]}
+ if(L<13){a=ri(2,20);b=ri(2,20);c=ri(2,9);d=ri(1,30);return [`(${a} + ${b}) × ${c} − ${d}`,(a+b)*c-d]}
+ a=ri(12,30);b=ri(3,15);c=ri(6,25);d=ri(1,99);return [`${a} × ${b} + ${c}² − ${d}`,a*b+c*c-d]},
+/* 1 Multiply and divide */ L=>{const o=R()<.5;let a,b,x;
+ if(L<2){a=ri(1,10);b=pc([2,3,5,10]);return o?[`${a} × ${b}`,a*b]:[`${a*b} ÷ ${b}`,a]}
+ if(L<3){a=ri(2,5);b=ri(1,10);return o?[`${a} × ${b}`,a*b]:[`${a*b} ÷ ${a}`,b]}
+ if(L<4){a=ri(2,10);b=ri(2,10);return o?[`${a} × ${b}`,a*b]:[`${a*b} ÷ ${a}`,b]}
+ if(L<8){const m=L<6?[2,9]:[11,99];a=ri(11,99);b=ri(...m);return o?[`${a} × ${b}`,a*b]:[`${a*b} ÷ ${b}`,a]}
+ x=ri(0,2);
+ if(L<10){if(x===0){a=ri(11,99);b=ri(2,9);return [`${(a/10).toFixed(1)} × ${b}`,(a*b/10).toFixed(1)]}a=ri(2,25);b=ri(2,9);return x===1?[`${a}²`,a*a]:[`${b}³`,b**3]}
+ if(L<12){a=ri(2,9);b=ri(2,15);if(x===0){const e=ri(2,4);return [`${a}^${e}`,a**e]}if(x===1){a=ri(11,30);return [`√${a*a}`,a]}return o?[`(${-a}) × (${-b})`,a*b]:[`(${-a}) × ${b}`,-a*b]}
+ a=ri(2,5);if(x===0){const m=ri(5,9),n=ri(2,4);return [`${a}^${m} ÷ ${a}^${n}`,a**(m-n)]}if(x===1){a=ri(2,15);return [`∛${a**3}`,a]}const m=ri(1,4),n=ri(1,4);return [`${a}^${m} × ${a}^${n}`,a**(m+n)]},
+/* 2 Fractions and percentages */ L=>{let a,b,c,d,n,p,x;const DD=[2,3,4,5,6,8,10];
+ if(L<2){x=ri(0,2);n=ri(1,25);return x===0?[`Half of ${2*n}`,n]:x===1?[`Double ${n}`,2*n]:[`How many halves make ${n%10+1} whole${n%10?'s':''}?`,2*(n%10+1)]}
+ if(L<3){x=ri(0,2);n=ri(5,50);return x===0?[`Half of ${2*n}`,n]:x===1?[`Double ${n}`,2*n]:(b=ri(1,10),[`A quarter of ${4*b}`,b])}
+ if(L<4){x=ri(0,2);n=ri(2,25);return x===0?[`A quarter of ${4*n}`,n]:x===1?[`1/3 of ${3*n}`,n]:[`1/5 of ${5*n}`,n]}
+ if(L<6){d=ri(5,15);a=ri(1,d-2);b=ri(1,d-1-a);return R()<.5?[`${a}/${d} + ${b}/${d}`,fr(a+b,d)]:[`${a+b}/${d} − ${a}/${d}`,fr(b,d)]}
+ if(L<8){if(R()<.5){b=pc(DD);d=pc(DD);a=ri(1,b-1);c=ri(1,d-1);return [`${a}/${b} + ${c}/${d}`,fr(a*d+c*b,b*d)]}p=pc([10,25,50]);n=20*ri(1,25);return [`${p}% of ${n}`,p*n/100]}
+ if(L<10){if(R()<.5){p=pc([5,10,15,20,30,40,60,75,80]);n=20*ri(2,40);return [`${p}% of ${n}`,p*n/100]}d=pc([2,4,5,10,20,25,50]);a=ri(1,d-1);return [`${a}/${d} as a percentage`,a*100/d+'%']}
+ x=ri(0,2);
+ if(L<12){if(x===2){a=ri(1,9);do{b=ri(1,9)}while(b===a);const k=ri(10,50);return [`Share ₹${(a+b)*k} in the ratio ${a}:${b}. What is the larger share?`,Math.max(a,b)*k]}n=100*ri(1,50);p=pc([10,20,25,50]);return x===0?[`A price of ₹${n} increases by ${p}%. What is the new price?`,n*(100+p)/100]:[`A price of ₹${n} decreases by ${p}%. What is the new price?`,n*(100-p)/100]}
+ if(x===0){n=1000*ri(1,20);p=pc([10,20]);const y=ri(2,3);return [`₹${n} is invested at ${p}% compound interest for ${y} years. What is the final amount?`,Math.round(n*(1+p/100)**y)]}
+ if(x===1){p=pc([10,20,25,40]);n=100*ri(2,40);return [`After a ${p}% discount, a price is ₹${n*(100-p)/100}. What was the original price?`,n]}
+ a=20*ri(1,20);p=pc([10,20,25,50]);return [`A price rises from ₹${a} to ₹${a*(100+p)/100}. What is the percentage increase?`,p+'%']},
+/* 3 Algebra */ L=>{let a,b,c,d,x,p,q;
+ if(L<2){a=ri(1,9);b=ri(1,9);return [`${a} + ? = ${a+b}`,b]}
+ if(L<3){a=ri(1,20);b=ri(1,9);return R()<.5?[`? − ${b} = ${a}`,a+b]:[`${a+b} − ? = ${a}`,b]}
+ if(L<5){a=ri(2,10);b=ri(2,10);return R()<.5?[`? × ${a} = ${a*b}`,b]:[`${a*b} ÷ ? = ${b}`,a]}
+ if(L<7){if(R()<.5){a=ri(1,30);b=ri(1,20);return [`Find x: x + ${b} = ${a+b}`,a]}a=ri(2,12);b=ri(2,15);return [`Find x: ${a}x = ${a*b}`,b]}
+ if(L<9){a=ri(2,9);c=ri(1,12);if(R()<.5){b=ri(1,20);return [`Find x: ${a}x + ${b} = ${a*c+b}`,c]}b=ri(1,a*c-1);return [`Find x: ${a}x − ${b} = ${a*c-b}`,c]}
+ if(L<11){if(R()<.5){a=ri(2,9);b=ri(1,9);c=ri(1,12);return [`Find x: ${a}(x − ${b}) = ${a*c}`,c+b]}x=ri(1,9);c=ri(1,5);a=c+ri(2,5);b=ri(1,(a-c)*x-1);d=(a-c)*x-b;return [`Find x: ${a}x − ${b} = ${c}x + ${d}`,x]}
+ if(L<13){if(R()<.5){do{p=ri(-9,9);q=ri(-9,9)}while(!p||!q||p===q||p+q===0);const big=R()<.5;return [`Solve x² ${sg(-(p+q))}x ${sg(p*q)} = 0. What is the ${big?'larger':'smaller'} root?`,big?Math.max(p,q):Math.min(p,q)]}x=ri(1,20);let y;do{y=ri(1,20)}while(y===x);return [`If x + y = ${x+y} and x − y = ${x-y}, find x.`,x]}
+ x=ri(0,3);
+ if(x===0){const k=ri(4,14);return [`Find x: 2^x = ${2**k}`,k]}
+ if(x===1){b=pc([2,3,5,10]);const k=b===2?ri(3,12):b===3?ri(2,7):b===5?ri(2,5):ri(2,6);return [`Find x: log base ${b} of ${b**k} = x`,k]}
+ if(x===2){a=ri(1,9);const n=ri(2,5),v=ri(1,4);return [`If f(x) = ${a}x^${n}, find f′(${v}).`,a*n*v**(n-1)]}
+ a=2*ri(1,5);const v=ri(1,6);return [`Evaluate the integral of ${a}x from 0 to ${v}.`,a*v*v/2]},
+/* 4 Geometry */ L=>{let a,b,c,k,n,x,t;const nm=pc(Object.keys(POLY));
+ if(L<2){n=POLY[nm];if(ri(0,2)===0)return [`How many sides does a ${nm} have?`,n];a=ri(1,12);return [`A ${nm} has all sides ${a} cm long. What is its perimeter in cm?`,n*a]}
+ if(L<3){if(R()<.5){a=ri(2,20);b=ri(1,a);return [`A rectangle is ${a} cm long and ${b} cm wide. What is its perimeter in cm?`,2*(a+b)]}a=ri(2,30);return [`A square has sides of ${a} cm. What is its perimeter in cm?`,4*a]}
+ if(L<4){a=ri(2,12);b=ri(2,12);return [`A rectangle is ${a} cm by ${b} cm. What is its area in cm²?`,a*b]}
+ if(L<6){x=R();if(x<.34){a=ri(5,30);b=ri(3,20);return [`A rectangle is ${a} cm by ${b} cm. What is its area in cm²?`,a*b]}if(x<.67){a=ri(5,25);return [`A square has sides of ${a} cm. What is its area in cm²?`,a*a]}a=ri(10,40);b=ri(5,30);return [`A rectangle is ${a} cm by ${b} cm. What is its perimeter in cm?`,2*(a+b)]}
+ if(L<8){x=ri(0,2);if(x===0){a=2*ri(2,15);b=ri(2,20);return [`A triangle has base ${a} cm and height ${b} cm. What is its area in cm²?`,a*b/2]}if(x===1){a=ri(20,80);b=ri(20,80);return [`Two angles of a triangle are ${a}° and ${b}°. What is the third angle in degrees?`,180-a-b]}a=ri(10,170);return [`An angle of ${a}° lies on a straight line. What is the other angle in degrees?`,180-a]}
+ if(L<10){x=ri(0,3);if(x===0){a=ri(1,15);return [`A circle has radius ${a} cm. What is its circumference in cm? (π = 3.14)`,(2*3.14*a).toFixed(2)]}if(x===1){a=ri(1,15);return [`A circle has radius ${a} cm. What is its area in cm²? (π = 3.14)`,(3.14*a*a).toFixed(2)]}if(x===2){a=ri(2,12);b=ri(2,12);c=ri(2,12);return [`A cuboid is ${a} cm by ${b} cm by ${c} cm. What is its volume in cm³?`,a*b*c]}t=pc(TR);k=ri(1,5);return [`A right triangle has legs ${t[0]*k} cm and ${t[1]*k} cm. What is the hypotenuse in cm?`,t[2]*k]}
+ if(L<12){x=ri(0,3);if(x===0){t=pc(TR);k=ri(1,5);return [`A right triangle has hypotenuse ${t[2]*k} cm and one leg ${t[0]*k} cm. What is the other leg in cm?`,t[1]*k]}if(x===1){n=ri(5,14);return [`What is the sum of the interior angles of a polygon with ${n} sides, in degrees?`,(n-2)*180]}if(x===2){a=ri(4,20);b=a+2*ri(1,5);c=ri(2,15);return [`A trapezium has parallel sides ${a} cm and ${b} cm and height ${c} cm. What is its area in cm²?`,(a+b)*c/2]}a=ri(1,10);b=ri(2,15);return [`A cylinder has radius ${a} cm and height ${b} cm. What is its volume in cm³? (π = 3.14)`,(3.14*a*a*b).toFixed(2)]}
+ x=ri(0,3);
+ if(x===0){const f=pc(['sin','cos','tan']);let th;do{th=pc([0,30,45,60,90])}while(f==='tan'&&th===90);const S={0:'0',30:'1/2',45:'√2/2',60:'√3/2',90:'1'},C={0:'1',30:'√3/2',45:'√2/2',60:'1/2',90:'0'},T={0:'0',30:'1/√3',45:'1',60:'√3'};const ans=(f==='sin'?S:f==='cos'?C:T)[th];return [`What is ${f} ${th}°?`,ans,shuf(['0','1/2','√2/2','√3/2','1','1/√3','√3'].filter(v=>v!==ans))]}
+ const x1=ri(-10,10),y1=ri(-10,10);
+ if(x===1){t=pc(TR);k=ri(1,4);a=t[0];b=t[1];if(R()<.5)[a,b]=[b,a];const sx=R()<.5?1:-1,sy=R()<.5?1:-1;return [`Find the distance between (${x1}, ${y1}) and (${x1+sx*a*k}, ${y1+sy*b*k}).`,t[2]*k]}
+ if(x===2){const dx=2*ri(1,8),dy=2*ri(1,8),mx=x1+dx/2,my=y1+dy/2;return [`Find the midpoint of (${x1}, ${y1}) and (${x1+dx}, ${y1+dy}).`,`(${mx}, ${my})`,[`(${mx+1}, ${my})`,`(${mx}, ${my+1})`,`(${x1+dx}, ${y1+dy})`]]}
+ const dx=ri(1,6),dy=ri(1,9);return [`Find the slope of the line through (${x1}, ${y1}) and (${x1+dx}, ${y1+dy}).`,fr(dy,dx),[fr(dy,dx+1),fr(dy+1,dx),fr(dy+2,dx)]]},
+/* 5 Patterns and series */ L=>{let a,d,n,r,x;
+ if(L<2){a=ri(1,40);return R()<.5?[`${seq(a,1,3)}, ?`,a+3]:[`${a+3}, ${a+2}, ${a+1}, ?`,a]}
+ if(L<3){const s=pc([2,5,10]),k=ri(0,20);return [`${seq(s*(k+1),s,3)}, ?`,s*(k+4)]}
+ if(L<5){d=ri(2,10);if(R()<.5){a=ri(1,50);return [`${seq(a,d,4)}, ?`,a+4*d]}a=ri(4*d+1,4*d+40);return [`${seq(a,-d,4)}, ?`,a-4*d]}
+ if(L<7){d=ri(2,15);a=ri(1,50);return R()<.5?[`${a}, ${a+d}, ?, ${a+3*d}`,a+2*d]:[`?, ${a+d}, ${a+2*d}, ${a+3*d}`,a]}
+ if(L<9){if(R()<.5){a=ri(1,20);d=ri(2,9);n=ri(8,20);return [`${seq(a,d,4)}, … What is the ${n}th term?`,a+(n-1)*d]}a=ri(1,6);r=pc([2,3,4]);return [`${a}, ${a*r}, ${a*r*r}, ?`,a*r**3]}
+ x=ri(0,2);
+ if(L<11){if(x===0){a=ri(1,9);d=ri(1,9);return [`${a}, ${d}, ${a+d}, ${a+2*d}, ${2*a+3*d}, ?`,3*a+5*d]}if(x===1){n=ri(1,20);return [`${n*n}, ${(n+1)**2}, ${(n+2)**2}, ?`,(n+3)**2]}n=ri(10,60);return [`What is the sum of the first ${n} natural numbers?`,n*(n+1)/2]}
+ if(L<13){if(x===0){a=ri(1,15);d=ri(1,8);n=2*ri(3,15);return [`Find the sum of the first ${n} terms of the series ${seq(a,d,3)}, …`,n*(2*a+(n-1)*d)/2]}if(x===1){a=ri(1,5);r=pc([2,3]);n=ri(5,9);return [`${a}, ${a*r}, ${a*r*r}, … What is term number ${n}?`,a*r**(n-1)]}n=ri(5,25);return [`What is 1² + 2² + … + ${n}²?`,n*(n+1)*(2*n+1)/6]}
+ x=ri(0,3);
+ if(x===0){const q=pc([[1,2],[1,3],[1,4],[2,3]]);a=6*ri(1,10);return [`A geometric series has first term ${a} and common ratio ${q[0]}/${q[1]}. What is the sum to infinity?`,a*q[1]/(q[1]-q[0])]}
+ if(x===1){a=ri(1,30);d=ri(2,9);n=ri(50,200);return [`An arithmetic sequence starts ${seq(a,d,3)}, … What is term number ${n}?`,a+(n-1)*d]}
+ if(x===2){n=ri(5,20);return [`What is 1³ + 2³ + … + ${n}³?`,(n*(n+1)/2)**2]}
+ r=ri(2,5);a=ri(2,6);n=ri(6,9);return [`${a}, ${a*r}, ${a*r*r}, … What is term number ${n}?`,a*r**(n-1)]},
+/* 6 Word problems */ L=>{let a,b,n,p,k;const nm=pc(NM),it=pc(IT);
+ if(L<2){a=ri(1,9);b=ri(1,9);return [`${nm} has ${a} ${it}. ${nm} gets ${b} more. How many ${it} does ${nm} have now?`,a+b]}
+ if(L<3){a=ri(5,20);b=ri(1,a-1);return [`${nm} had ${a} ${it} and gave away ${b}. How many are left?`,a-b]}
+ if(L<5){a=ri(2,9);b=ri(2,12);return R()<.5?[`There are ${a} boxes with ${b} ${it} in each. How many ${it} are there in total?`,a*b]:[`${a*b} ${it} are shared equally among ${a} children. How many does each child get?`,b]}
+ if(L<7){n=ri(2,12);p=ri(2,50);if(R()<.5)return [`${n} ${it} cost ₹${n*p}. What is the cost of one?`,p];const pay=(Math.floor(n*p/100)+1)*100;return [`${nm} buys ${n} pens at ₹${p} each and pays ₹${pay}. How much change does ${nm} get?`,pay-n*p]}
+ if(L<9){if(R()<.5){a=100*ri(2,40);p=pc([10,20,25,50]);return [`A shirt costs ₹${a}. A ${p}% discount is given. What is the price to pay?`,a*(100-p)/100]}a=ri(20,90);b=ri(2,9);return [`A bus travels at ${a} km/h for ${b} hours. How far does it go in km?`,a*b]}
+ if(L<11){const x=ri(0,2);if(x===0){k=ri(3,5);a=ri(5,20);return [`${nm}'s mother is ${k} times as old as ${nm}. Together their ages add up to ${(k+1)*a}. How old is ${nm}?`,a]}if(x===1){n=ri(3,9);const m=ri(10,60);return [`The average of ${n} numbers is ${m}. What is their total?`,n*m]}a=ri(5,30);b=ri(5,30);const c=ri(5,30);let d=ri(1,40);d+=(4-(a+b+c+d)%4)%4;return [`The average of 4 numbers is ${(a+b+c+d)/4}. Three of them are ${a}, ${b} and ${c}. What is the fourth?`,d]}
+ if(L<13){if(R()<.5){a=1000*ri(1,20);p=pc([4,5,6,8,10]);n=ri(2,5);return [`What is the simple interest on ₹${a} at ${p}% per year for ${n} years?`,a*p*n/100]}const W=[[12,6,4],[10,15,6],[20,30,12],[6,3,2],[30,20,12],[12,4,3],[60,40,24],[15,10,6]],w=pc(W);return [`Tap A fills a tank in ${w[0]} hours and tap B in ${w[1]} hours. Together, how many hours do they take?`,w[2]]}
+ const x=ri(0,2);
+ if(x===0){a=1000*ri(1,30);return [`A town of ${a} people grows by 10% each year. What is the population after 2 years?`,Math.round(a*1.21)]}
+ if(x===1){a=100*ri(2,50);return [`A machine worth ₹${a} loses 20% of its value each year. What is it worth after 2 years?`,Math.round(a*.64)]}
+ const s1=ri(30,80),s2=ri(30,80),t=ri(2,6);return [`Two trains ${(s1+s2)*t} km apart move towards each other at ${s1} km/h and ${s2} km/h. After how many hours do they meet?`,t]},
+/* 7 Measurement and time */ L=>{let a,b,x,k;
+ if(L<2){x=ri(0,2);a=ri(1,20);do{b=ri(1,20)}while(b===a);const u=['cm','kg','L'],wd=['longer','heavier','more'];return [`Which is ${wd[x]}: ${a} ${u[x]} or ${b} ${u[x]}?`,Math.max(a,b)+' '+u[x],[Math.min(a,b)+' '+u[x],'They are the same','Cannot tell']]}
+ if(L<3){x=ri(0,2);if(x===0){const h=ri(1,12),m=pc([15,30,45]);return [`What time is ${m} minutes after ${h}:00?`,`${h}:${m}`,['00','15','30','45'].filter(v=>v!==String(m)).map(v=>`${h}:${v}`)]}a=ri(2,30);return x===1?[`How many hours are there in ${a} days?`,24*a]:[`How many minutes are there in ${a} hours?`,60*a]}
+ if(L<5){const u=pc([['m','cm',100],['km','m',1000],['kg','g',1000],['L','mL',1000]]);a=ri(2,50);return [`${a} ${u[0]} = ? ${u[1]}`,a*u[2]]}
+ if(L<7){if(R()<.5){const s=5*ri(72,216),d=5*ri(4,48);return [`A train leaves at ${hm(s)} and arrives at ${hm(s+d)}. How long is the journey?`,du(d),[du(d+15),du(d-15),du(d+30)]]}const h=ri(1,11),mm=pc(['00','15','30','45']);return [`Write ${h}:${mm} PM in 24-hour time.`,`${h+12}:${mm}`,[`${h}:${mm}`,`${h+11}:${mm}`,`${h+13}:${mm}`]]}
+ if(L<9){const u=pc([['cm','m',100],['g','kg',1000],['mL','L',1000]]);a=5*ri(1,199);return [`${a} ${u[0]} = ? ${u[1]}`,a/u[2]]}
+ if(L<11){x=ri(0,3);const s=ri(20,90),t=ri(2,9);if(x===0)return [`A car travels at ${s} km/h for ${t} hours. How far does it go in km?`,s*t];if(x===1)return [`A cyclist covers ${s*t} km at ${s} km/h. How many hours does it take?`,t];if(x===2)return [`A train covers ${s*t} km in ${t} hours. What is its speed in km/h?`,s];a=5*ri(-6,30);return [`${a}°C = ? °F`,a*9/5+32]}
+ x=ri(0,3);
+ if(L<13){k=ri(1,20);if(x===0)return [`${18*k} km/h = ? m/s`,5*k];if(x===1)return [`${5*k} m/s = ? km/h`,18*k];if(x===2){a=ri(2,20);b=ri(2,15);return [`A block of mass ${a*b} g has volume ${a} cm³. What is its density in g/cm³?`,b]}a=ri(2,50);return [`${a} m² = ? cm²`,a*10000]}
+ if(x===0){a=ri(2,30);return [`${a} km² = ? m²`,a*1000000]}
+ if(x===1){a=2*ri(1,10);b=ri(2,15);return [`Find the kinetic energy (½mv²) in joules of a ${a} kg mass moving at ${b} m/s.`,a*b*b/2]}
+ if(x===2){const u=ri(1,10),ac=2*ri(1,5),t=ri(2,8);return [`Using s = ut + ½at², find s when u = ${u}, a = ${ac} and t = ${t}.`,u*t+ac*t*t/2]}
+ a=100*ri(1,20);b=ri(2,9);return [`A ${a} W heater runs for ${b} hours. How many kWh of energy does it use?`,a*b/1000]},
+/* 8 Logic and reasoning */ L=>{let a,b,c,x,k;const ltr=(i,ds)=>ds.map(d=>i+d).filter(j=>j>=0&&j<26).map(j=>AB[j]);
+ if(L<2){x=ri(0,2);if(x===0){a=ri(1,30);do{b=ri(1,30)}while(b===a);return [`Which number is bigger: ${a} or ${b}?`,Math.max(a,b),[Math.min(a,b)]]}if(x===1){a=ri(1,49);return [`What number comes after ${a}?`,a+1]}a=ri(2,50);return [`What number comes just before ${a}?`,a-1]}
+ if(L<3){if(R()<.5){const t=shuf(Array.from({length:99},(_,i)=>i+1)).slice(0,3);const m=Math.min(...t);return [`Which is the smallest: ${t.join(', ')}?`,m,t.filter(v=>v!==m)]}const ev=R()<.5,maj=shuf(Array.from({length:20},(_,i)=>2*i+(ev?2:1))).slice(0,3),one=2*ri(1,20)-(ev?1:0);return [`Odd one out: ${shuf([...maj,one]).join(', ')}`,one,maj]}
+ if(L<5){x=ri(0,2);if(x===0){k=ri(3,9);const m=shuf(Array.from({length:11},(_,i)=>k*(i+2))).slice(0,3);do{a=ri(10,100)}while(a%k===0);return [`Odd one out (three are multiples of ${k}): ${shuf([...m,a]).join(', ')}`,a,m]}if(x===1){c=ri(0,24);return [`Which letter comes after ${AB[c]}?`,AB[c+1],ltr(c+1,[1,-2,2,-1,3,-3,-4])]}c=ri(1,25);return [`Which letter comes just before ${AB[c]}?`,AB[c-1],ltr(c-1,[1,-1,2,-2,3,-3,4])]}
+ if(L<7){if(R()<.5){a=ri(1,20);x=ri(2,6);b=ri(2,6);return [`${a}, ${a+x}, ${a+x+b}, ${a+2*x+b}, ?`,a+2*x+2*b]}const s=ri(0,13),st=ri(2,3),i=s+4*st;return [`${[0,1,2,3].map(j=>AB[s+j*st]).join(', ')}, ?`,AB[i],ltr(i,[-1,1,-2,2,-3,3])]}
+ if(L<9){const w=pc(WORDS);if(R()<.5)return [`What is the sum of the letter positions in "${w}"? (A=1, B=2, …)`,[...w].reduce((t,ch)=>t+AB.indexOf(ch)+1,0)];k=ri(1,3);return [`If each letter is shifted forward by ${k}, CAT becomes ${shift('CAT',k)}. What does ${w} become?`,shift(w,k),[shift(w,k+1),shift(w,k-1),shift(w,k+2)]]}
+ if(L<11){if(R()<.5){const t=pc(TR);k=ri(1,15);return [`A person walks ${t[0]*k} m north and then ${t[1]*k} m east. How far is the person from the start, in metres?`,t[2]*k]}const ns=shuf([...NM]).slice(0,3),tall=R()<.5,ans=tall?ns[0]:ns[2];return [`${ns[0]} is taller than ${ns[1]}. ${ns[1]} is taller than ${ns[2]}. Who is the ${tall?'tallest':'shortest'}?`,ans,shuf(NM.filter(n=>n!==ans))]}
+ x=ri(0,4);
+ if(L<13){if(x===0){const bo=ri(2,10);a=bo+ri(3,15);b=bo+ri(3,15);c=ri(1,6);return [`In a class of ${a+b-bo+c}, ${a} students like tea, ${b} like coffee and ${c} like neither. How many like both?`,bo]}if(x===1){const d=ri(0,6),n=ri(10,200),ans=DAYS[(d+n)%7];return [`Today is ${DAYS[d]}. What day will it be after ${n} days?`,ans,shuf(DAYS.filter(v=>v!==ans))]}if(x===2){a=ri(1,15);return [`${a*a}, ${(a+1)**2}, ${(a+2)**2}, ${(a+3)**2}, ?`,(a+4)**2]}if(x===3){a=ri(0,19);return [`${PRIMES.slice(a,a+4).join(', ')}, ?`,PRIMES[a+4]]}a=ri(1,12);return [`${a**3}, ${(a+1)**3}, ${(a+2)**3}, ${(a+3)**3}, ?`,(a+4)**3]}
+ if(x===0||x===4){a=ri(100,9999);b=ri(3,19);return [`What is the remainder when ${a} is divided by ${b}?`,a%b]}
+ if(x===1){a=ri(5,40);return [`How many diagonals does a polygon with ${a} sides have?`,a*(a-3)/2]}
+ if(x===2){a=ri(3,40);return [`${a} people each shake hands once with every other person. How many handshakes are there?`,a*(a-1)/2]}
+ a=ri(1,11);return [`What is the smaller angle between the clock hands at ${a}:00, in degrees?`,Math.min(30*a,360-30*a)]},
+/* 9 Chance and data */ L=>{let a,b,c,x,n;
+ if(L<2){if(R()<.5){const em=pc(['🍎','⭐','🔵','🐟','🌸']);n=ri(1,10);return [`Count them: ${Array(n).fill(em).join(' ')}. How many are there?`,n]}const t=shuf([...NM]);a=ri(1,9);do{b=ri(1,9)}while(b===a);const it=pc(IT);return [`${t[0]} has ${a} ${it} and ${t[1]} has ${b}. Who has more?`,a>b?t[0]:t[1],shuf(NM.filter(v=>v!==(a>b?t[0]:t[1])))]}
+ if(L<3){if(R()<.5){a=ri(1,10);b=ri(1,10);return [`A bag has ${a} red and ${b} blue balls. How many balls are there in all?`,a+b]}a=ri(2,10);b=ri(1,a-1);return [`A bag has ${a} red and ${b} blue balls. How many more red balls than blue balls?`,a-b]}
+ if(L<5){if(R()<.5){const m=ri(1,9),o=shuf([1,2,3,4,5,6,7,8,9].filter(v=>v!==m)).slice(0,3);return [`Find the mode: ${shuf([m,m,m,...o,o[0]]).join(', ')}`,m,o]}a=ri(1,20);b=ri(1,20);c=ri(1,20);c+=(3-(a+b+c)%3)%3;return [`Find the mean of ${a}, ${b} and ${c}.`,(a+b+c)/3]}
+ if(L<7){x=ri(0,2);const arr=shuf(Array.from({length:50},(_,i)=>i+1)).slice(0,5),so=[...arr].sort((p,q)=>p-q);if(x===0)return [`Find the median: ${arr.join(', ')}`,so[2],arr.filter(v=>v!==so[2])];if(x===1)return [`Find the range of: ${arr.join(', ')}`,so[4]-so[0]];a=ri(1,9);b=ri(1,9);return [`A bag has ${a} red and ${b} blue balls. What is the probability of picking a red ball?`,fr(a,a+b)]}
+ if(L<9){x=ri(0,2);if(x===0){const v=Array.from({length:4},()=>ri(1,30));let l=ri(1,30);l+=(5-(v.reduce((p,q)=>p+q,0)+l)%5)%5;v.push(l);return [`Find the mean of ${v.join(', ')}.`,v.reduce((p,q)=>p+q,0)/5]}if(x===1){a=ri(1,8);b=ri(1,8);c=ri(1,8);return [`A bag has ${a} red, ${b} blue and ${c} green balls. What is the probability of picking green?`,fr(c,a+b+c)]}const h=ri(0,2);return [`Two coins are tossed. What is the probability of exactly ${h} head${h===1?'':'s'}?`,fr(ncr(2,h),4)]}
+ if(L<11){x=ri(0,3);if(x===0){n=ri(3,8);return [`In how many ways can ${n} people stand in a line?`,fact(n)]}if(x===1){n=ri(5,15);a=ri(2,4);return [`In how many ways can ${a} students be chosen from ${n}?`,ncr(n,a)]}if(x===2){n=ri(2,12);return [`Two dice are rolled. What is the probability that the sum is ${n}?`,fr(6-Math.abs(n-7),36)]}n=ri(5,12);a=ri(2,3);let p=1;for(let i=0;i<a;i++)p*=n-i;return [`In how many ways can ${a} books out of ${n} be arranged on a shelf?`,p]}
+ x=ri(0,2);
+ if(L<13){if(x===0){a=10*ri(1,10);b=10*ri(0,5);c=ri(1,9);return [`A game pays ₹${a} with probability ${c}/10 and ₹${b} otherwise. What is the expected payout in ₹?`,(a*c+b*(10-c))/10]}if(x===1){n=ri(2,8);return [`A fair coin is tossed ${n} times. What is the probability of at least one head?`,fr(2**n-1,2**n)]}n=ri(6,12);a=ri(3,4);let p=1;for(let i=0;i<a;i++)p*=n-i;return [`How many ways can ${a} different prizes be given to ${n} students if nobody gets two?`,p]}
+ if(x===0){n=ri(10,20);a=ri(3,5);return [`How many ways can ${a} items be chosen from ${n}?`,ncr(n,a)]}
+ if(x===1){n=ri(3,8);a=ri(0,n);return [`A fair coin is tossed ${n} times. What is the probability of exactly ${a} heads?`,fr(ncr(n,a),2**n)]}
+ n=ri(3,11);let w=0;for(let t=n;t<=12;t++)w+=6-Math.abs(t-7);return [`Two dice are rolled. What is the probability that the sum is at least ${n}?`,fr(w,36)]}
+];
+function opts(a,w){a=String(a);const set=[],add=x=>{x=String(x);if(x!==a&&!set.includes(x)&&set.length<3)set.push(x)};(w||[]).forEach(add);
+  const m=a.match(/^(-?\d+(?:\.\d+)?)([^\d]*)$/),f=a.match(/^(\d+)\/(\d+)$/);
+  if(m&&set.length<3){const n=+m[1],dec=(m[1].split('.')[1]||'').length,u=Math.pow(10,-dec);for(const d of [1,-1,2,-2,10,-10,3,-3,5,-5,11,-11,20,-20,100,-100]){const v=n+d*u;if(n>=0&&v<0)continue;add((dec?v.toFixed(dec):Math.round(v))+m[2])}}
+  else if(f&&set.length<3){const n=+f[1],d=+f[2];[[n+1,d],[n,d+1],[Math.max(1,n-1),d],[n,Math.max(2,d-1)],[n+1,d+1],[n+2,d]].forEach(v=>add(v[0]+'/'+v[1]))}
+  let k=1;while(set.length<3){add(f?ri(1,9)+'/'+ri(2,12):m?(+m[1]+k++)+m[2]:'None of these '+k++)}
+  const o=shuf([a,...set]);return [o,o.indexOf(a)]}
+const QC={};
+function getSet(lv,c){const key=lv+'-'+c;if(QC[key])return QC[key];
+  R=(s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296})(lv*977+c*131+7);
+  const out=[],seen=new Set();
+  for(let i=0;i<50;i++){const L=lv+i/50;let g,tr=0;do{g=CG[c](L)}while(seen.has(g[0]+'|'+g[1])&&++tr<3000);seen.add(g[0]+'|'+g[1]);const [o,ci]=opts(g[1],g[2]);out.push({q:g[0],o,c:ci,w:g[0].length+String(g[1]).length*2})}
+  R=Math.random;out.sort((p,q)=>p.w-q.w);return QC[key]=out}
+/* factual banks (tiers 1 to 5 = easy to hard) and category generators */
+const bk=(...g)=>g.flatMap((s,i)=>s.split(';').map(x=>{const p=x.split('>');return [p[0],p[1],i+1]}));
+const nr=(items,L,w=0)=>{const d=Math.max(1,Math.min(5,1+(L-1)/3));let n=items.filter(x=>x[2]<=d+1+w&&x[2]>=d-2-w);if(n.length<14)n=items.map(x=>[Math.abs(x[2]-d),x]).sort((p,q)=>p[0]-q[0]).slice(0,14).map(x=>x[1]);return n.map(x=>[Math.abs(x[2]-d)+R()*.5,x]).sort((p,q)=>p[0]-q[0]).slice(0,50).map(x=>x[1])};
+const sk=a=>a[Math.floor(Math.pow(R(),1.5)*a.length)];
+const ask=(items,f,r,fix,w)=>L=>{const n=nr(items,L,w),it=sk(n),rev=r&&R()<.5,ans=rev?it[0]:it[1],qw=rev?it[1]:it[0],pool=fix||[...new Set(n.map(x=>rev?x[0]:x[1]))];
+  return [rev?r(it[1]):f(it[0]),ans,shuf(pool.filter(v=>v!==ans&&v!==qw)).slice(0,3)]};
+const qa=(items,w)=>L=>{const it=sk(nr(items,L,w)),p=it[1].split(',');return [it[0],p[0],shuf(p.slice(1))]};
+const ANT=bk(`big>small;hot>cold;up>down;happy>sad;fast>slow;day>night;hard>soft;old>new;full>empty;open>close;bright>dim;wet>dry;tall>short;near>far;in>out;clean>dirty`,`strong>weak;rich>poor;early>late;thick>thin;heavy>light;sweet>sour;loud>quiet;buy>sell;win>lose;begin>end;always>never;true>false;enter>exit;arrive>depart;smooth>rough;friend>enemy;push>pull;brave>cowardly`,`ancient>modern;generous>selfish;expand>contract;victory>defeat;accept>reject;increase>decrease;permanent>temporary;transparent>opaque;abundant>scarce;vertical>horizontal;ascend>descend;maximum>minimum;innocent>guilty;success>failure;include>exclude;public>private`,`diligent>lazy;flexible>rigid;hostile>friendly;optimist>pessimist;arrogant>humble;prosperity>poverty;concise>verbose;frugal>extravagant;cautious>reckless;fertile>barren;voluntary>compulsory;benevolent>malevolent`,`ephemeral>permanent;superficial>profound;ambiguous>clear;amateur>professional;concave>convex;zenith>nadir;candid>evasive;meticulous>careless;ostentatious>modest;subtle>obvious;mundane>extraordinary;lucid>unclear`);
+const SYN=bk(`big>large;small>little;happy>glad;quick>fast;begin>start;shut>close;scared>afraid;pretty>beautiful;sofa>couch;kid>child;buy>purchase;mad>angry;nice>kind;rock>stone`,`huge>enormous;tiny>minute;rapid>swift;error>mistake;talk>speak;hard>difficult;finish>complete;silent>quiet;brave>courageous;choose>select;trip>journey;assist>help;shout>yell;gift>present`,`abundant>plentiful;reluctant>unwilling;vital>essential;conceal>hide;fragile>delicate;genuine>authentic;observe>watch;prohibit>forbid;hesitate>pause;depart>leave;endeavour>attempt;ample>enough`,`benevolent>kind-hearted;frugal>thrifty;diligent>hardworking;tranquil>peaceful;obsolete>outdated;candid>honest;meticulous>careful;resilient>tough;ponder>think;mitigate>reduce;scrutinise>examine;eloquent>well-spoken`,`ubiquitous>found everywhere;ephemeral>short-lived;ambiguous>unclear;pragmatic>practical;gregarious>sociable;tenacious>persistent;lucid>clear;austere>severe;laconic>brief;ardent>passionate`);
+const SP=bk(`apple;water;friend;school;house;green;happy;mother;family;animal`,`because;people;answer;library;island;enough;pencil;holiday;careful;laugh;minute;science`,`separate;necessary;receive;believe;calendar;environment;government;language;weather;strength;neighbour;interesting`,`accommodate;embarrass;occasion;committee;restaurant;definitely;parallel;privilege;recommend;temperature;vegetable;secretary`,`conscience;rhythm;millennium;pronunciation;maintenance;questionnaire;bureaucracy;acquaintance;perseverance;miscellaneous;entrepreneur;silhouette`);
+const VW='aeiou';
+function mis(w){const t=[];for(let k=0;k<80&&t.length<3;k++){let s=w,i=ri(1,w.length-2),x=ri(0,3);
+  if(x===0&&w[i]!==w[i+1])s=w.slice(0,i)+w[i+1]+w[i]+w.slice(i+2);
+  else if(x===1)s=w.slice(0,i)+w.slice(i+1);
+  else if(x===2)s=w.slice(0,i)+w[i]+w.slice(i);
+  else{const j=[...w].map((c,n)=>VW.includes(c)?n:-1).filter(n=>n>0);if(j.length){const n=pc(j);s=w.slice(0,n)+pc([...VW].filter(v=>v!==w[n]))+w.slice(n+1)}}
+  if(s!==w&&!t.includes(s))t.push(s)}return t}
+const spell=L=>{const n=nr(SP,L),w=sk(n)[0],m=mis(w);if(R()<.5)return ['Which spelling is correct?',w,m];return ['Which of these is spelled WRONG?',m[0],shuf(n.map(x=>x[0]).filter(v=>v!==w)).slice(0,3)]};
+const PL=bk(`cat>cats;dog>dogs;book>books;box>boxes;bus>buses;baby>babies;leaf>leaves;man>men;child>children;foot>feet;tooth>teeth;mouse>mice;day>days;city>cities`,`woman>women;wolf>wolves;knife>knives;potato>potatoes;goose>geese;sheep>sheep;deer>deer;church>churches;dish>dishes;hero>heroes;half>halves;life>lives;story>stories`,`analysis>analyses;crisis>crises;bacterium>bacteria;phenomenon>phenomena;criterion>criteria;cactus>cacti;nucleus>nuclei;radius>radii;thesis>theses;medium>media;datum>data;ox>oxen`,`curriculum>curricula;stimulus>stimuli;fungus>fungi;hypothesis>hypotheses;appendix>appendices;larva>larvae;alumnus>alumni;vertebra>vertebrae;diagnosis>diagnoses;parenthesis>parentheses`,`axis>axes;oasis>oases;ellipsis>ellipses;synopsis>synopses;corpus>corpora;locus>loci;genus>genera;memorandum>memoranda;bacillus>bacilli;terminus>termini`);
+const plural=L=>{const it=sk(nr(PL,L)),a=it[0],c=[a+'s',a+'es',a.replace(/y$/,'ies'),a+'en',a.replace(/(f|fe)$/,'ves'),a.replace(/us$/,'i'),a.replace(/is$/,'es'),a.replace(/on$/,'a')];return [`What is the plural of "${a}"?`,it[1],shuf([...new Set(c)].filter(v=>v!==it[1])).slice(0,3)]};
+const PT=bk(`walk>walked;jump>jumped;play>played;go>went;run>ran;eat>ate;see>saw;sit>sat;come>came;make>made;help>helped;look>looked`,`take>took;give>gave;write>wrote;swim>swam;drink>drank;sleep>slept;buy>bought;bring>brought;catch>caught;teach>taught;think>thought;find>found;tell>told`,`begin>began;break>broke;choose>chose;drive>drove;fly>flew;forget>forgot;hide>hid;know>knew;ride>rode;sing>sang;steal>stole;wear>wore`,`seek>sought;shake>shook;swear>swore;sink>sank;spring>sprang;freeze>froze;bite>bit;grow>grew;draw>drew;throw>threw;blow>blew;hang>hung`,`awake>awoke;slay>slew;shrink>shrank;cling>clung;sting>stung;flee>fled;withdraw>withdrew;overcome>overcame;undertake>undertook;forbid>forbade;strive>strove;weave>wove`);
+const past=L=>{const n=nr(PT,L),it=sk(n),a=it[0],c=[a+'ed',a.replace(/e$/,'')+'ed',...shuf(n.map(x=>x[1])).slice(0,4)];return [`What is the past tense of "${a}"?`,it[1],shuf([...new Set(c)].filter(v=>v!==it[1])).slice(0,3)]};
+const POS=bk(`dog>noun;table>noun;jump>verb;eat>verb;big>adjective;red>adjective;quickly>adverb;slowly>adverb;sing>verb;city>noun`,`teacher>noun;river>noun;write>verb;climb>verb;beautiful>adjective;happily>adverb;carefully>adverb;music>noun;gentle>adjective;loudly>adverb`,`happiness>noun;freedom>noun;whisper>verb;create>verb;curious>adjective;fragile>adjective;silently>adverb;eagerly>adverb`,`courage>noun;friendship>noun;explore>verb;accomplish>verb;generous>adjective;ancient>adjective;eventually>adverb;thoroughly>adverb`,`curiosity>noun;eloquence>noun;contemplate>verb;exaggerate>verb;ambiguous>adjective;resilient>adjective;reluctantly>adverb;meticulously>adverb`);
+const CLS=['mammal','bird','reptile','fish','amphibian','insect','arachnid'];
+const ACL=bk(`dog>mammal;cat>mammal;cow>mammal;parrot>bird;eagle>bird;sparrow>bird;snake>reptile;lizard>reptile;frog>amphibian;goldfish>fish;shark>fish;butterfly>insect;ant>insect;bee>insect`,`whale>mammal;dolphin>mammal;bat>mammal;penguin>bird;ostrich>bird;crocodile>reptile;turtle>reptile;toad>amphibian;salmon>fish;seahorse>fish;beetle>insect;grasshopper>insect;spider>arachnid;scorpion>arachnid`,`kangaroo>mammal;platypus>mammal;tortoise>reptile;gecko>reptile;newt>amphibian;salamander>amphibian;eel>fish;tuna>fish;dragonfly>insect;mosquito>insect;owl>bird;hummingbird>bird`,`orca>mammal;pangolin>mammal;emu>bird;kiwi>bird;komodo dragon>reptile;axolotl>amphibian;manta ray>fish;tarantula>arachnid;cicada>insect;firefly>insect;seal>mammal;flamingo>bird`,`echidna>mammal;tuatara>reptile;caecilian>amphibian;coelacanth>fish;praying mantis>insect;harvestman>arachnid;pika>mammal;cassowary>bird;gharial>reptile;lungfish>fish`);
+const DIET=bk(`cow>herbivore;lion>carnivore;bear>omnivore;rabbit>herbivore;tiger>carnivore;pig>omnivore;elephant>herbivore;wolf>carnivore;deer>herbivore;hen>omnivore`,`giraffe>herbivore;shark>carnivore;crow>omnivore;horse>herbivore;eagle>carnivore;squirrel>omnivore;goat>herbivore;crocodile>carnivore;mushroom>decomposer;earthworm>decomposer`,`panda>herbivore;polar bear>carnivore;raccoon>omnivore;koala>herbivore;owl>carnivore;hedgehog>omnivore;zebra>herbivore;hyena>carnivore;fungus>decomposer;rhinoceros>herbivore`,`manatee>herbivore;orca>carnivore;chimpanzee>omnivore;sloth>herbivore;falcon>carnivore;badger>omnivore;tortoise>herbivore;mongoose>carnivore;ostrich>omnivore;yak>herbivore`,`capybara>herbivore;snow leopard>carnivore;cassowary>omnivore;dugong>herbivore;osprey>carnivore;wild boar>omnivore;okapi>herbivore;barracuda>carnivore;bison>herbivore;lynx>carnivore`);
+const BODY=bk(`heart>pumps blood around the body;lungs>help us breathe;brain>controls the body;stomach>digests food;eyes>help us see;ears>help us hear;skin>protects the body;teeth>chew food;nose>helps us smell;tongue>helps us taste;roots>absorb water and minerals from the soil;leaf>makes food using sunlight;stem>holds the plant up;flower>makes seeds`,`bones>support the body;muscles>help us move;kidneys>filter waste from the blood;small intestine>absorbs nutrients from food;liver>processes nutrients and removes toxins;spinal cord>carries messages between brain and body;skull>protects the brain;ribs>protect the heart and lungs;windpipe>carries air to the lungs;oesophagus>carries food to the stomach;seed>grows into a new plant;fruit>protects the seeds`,`pancreas>makes insulin;red blood cells>carry oxygen;white blood cells>fight germs;platelets>help blood to clot;large intestine>absorbs water from waste;bladder>stores urine;diaphragm>helps with breathing;retina>detects light at the back of the eye;cornea>covers the front of the eye;eardrum>vibrates when sound reaches it;stomata>let gases in and out of a leaf;chlorophyll>traps sunlight;xylem>carries water up the plant`,`thyroid gland>controls metabolism;cerebellum>controls balance and coordination;alveoli>exchange gases in the lungs;neurons>carry nerve signals;aorta>carries blood from the heart to the body;pituitary gland>is called the master gland;gall bladder>stores bile;enamel>protects the teeth;femur>is the longest bone in the body;phloem>carries food around the plant`,`medulla>controls breathing and heartbeat;cochlea>turns sound into nerve signals;nephron>filters blood in the kidney;ventricle>pumps blood out of the heart;atrium>receives blood into the heart;villi>absorb nutrients in the small intestine;adrenaline>prepares the body for action;tendon>joins muscle to bone;ligament>joins bone to bone`);
+const ELS=bk(`H>Hydrogen;O>Oxygen;C>Carbon;N>Nitrogen;He>Helium;Fe>Iron;Au>Gold;Ag>Silver;Cu>Copper;Na>Sodium`,`K>Potassium;Ca>Calcium;Pb>Lead;Sn>Tin;Hg>Mercury;Zn>Zinc;Mg>Magnesium;Cl>Chlorine;S>Sulfur;Al>Aluminium;Ne>Neon;Li>Lithium;F>Fluorine`,`P>Phosphorus;Si>Silicon;W>Tungsten;Ni>Nickel;Co>Cobalt;Mn>Manganese;Cr>Chromium;I>Iodine;Br>Bromine;B>Boron;Ar>Argon;Ti>Titanium`,`Pt>Platinum;U>Uranium;Ra>Radium;Sr>Strontium;Ba>Barium;Rn>Radon;Xe>Xenon;Kr>Krypton;Be>Beryllium;Sb>Antimony;As>Arsenic;Cd>Cadmium`,`Bi>Bismuth;Tl>Thallium;Pu>Plutonium;Cs>Caesium;Rb>Rubidium;Ge>Germanium;Se>Selenium;Te>Tellurium;Zr>Zirconium;Mo>Molybdenum;Pd>Palladium;Ir>Iridium`);
+const ATN=bk(`1>Hydrogen;2>Helium;6>Carbon;8>Oxygen;7>Nitrogen;11>Sodium;17>Chlorine;20>Calcium`,`3>Lithium;10>Neon;12>Magnesium;13>Aluminium;14>Silicon;16>Sulfur;19>Potassium;26>Iron`,`29>Copper;30>Zinc;47>Silver;79>Gold;82>Lead;80>Mercury;92>Uranium;18>Argon`,`28>Nickel;27>Cobalt;50>Tin;78>Platinum;74>Tungsten;53>Iodine;35>Bromine;15>Phosphorus`,`88>Radium;86>Radon;54>Xenon;36>Krypton;56>Barium;38>Strontium;33>Arsenic;48>Cadmium`);
+const UNIT=bk(`length>metre;time>second;mass>kilogram`,`force>newton;energy>joule;power>watt;electric current>ampere;voltage>volt;frequency>hertz`,`pressure>pascal;resistance>ohm;electric charge>coulomb;work>joule;temperature in the SI system>kelvin;area>square metre;volume>cubic metre`,`speed>metres per second;acceleration>metres per second squared;density>kilograms per cubic metre;momentum>kilogram metres per second;magnetic flux density>tesla;capacitance>farad;inductance>henry;luminous intensity>candela`,`amount of substance>mole;radioactivity>becquerel;absorbed radiation dose>gray;illuminance>lux;electric conductance>siemens;magnetic flux>weber;angular velocity>radians per second;torque>newton metre`);
+const PLN=bk(`the planet we live on>Earth;the largest planet>Jupiter;the Red Planet>Mars;1>Mercury;3>Earth`,`the smallest planet>Mercury;the hottest planet>Venus;the planet with the famous rings>Saturn;2>Venus;4>Mars;5>Jupiter;6>Saturn`,`7>Uranus;8>Neptune;the planet that spins on its side>Uranus;the planet closest to the Sun>Mercury;the planet farthest from the Sun>Neptune`);
+const PLS=['Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus','Neptune'];
+const CHG=bk(`melting>solid to liquid;freezing>liquid to solid`,`evaporation>liquid to gas;condensation>gas to liquid`,`boiling>liquid to gas`,`sublimation>solid to gas`,`deposition>gas to solid`);
+const FRM=bk(`water>H2O;carbon dioxide>CO2;oxygen gas>O2`,`table salt>NaCl;methane>CH4;ammonia>NH3`,`hydrochloric acid>HCl;sodium hydroxide>NaOH;glucose>C6H12O6;hydrogen peroxide>H2O2`,`sulfuric acid>H2SO4;nitric acid>HNO3;calcium carbonate>CaCO3;carbon monoxide>CO`,`ethanol>C2H5OH;sodium bicarbonate>NaHCO3;ozone>O3;nitrogen dioxide>NO2`);
+const CAP=bk(`India>New Delhi;China>Beijing;Japan>Tokyo;France>Paris;Italy>Rome;Egypt>Cairo;Australia>Canberra;United Kingdom>London;Germany>Berlin;Spain>Madrid;Russia>Moscow;Canada>Ottawa;Brazil>Brasilia;Pakistan>Islamabad;Bangladesh>Dhaka;Nepal>Kathmandu;United States>Washington DC`,`Argentina>Buenos Aires;Mexico>Mexico City;Turkey>Ankara;Greece>Athens;Portugal>Lisbon;Netherlands>Amsterdam;Sweden>Stockholm;Norway>Oslo;Kenya>Nairobi;Nigeria>Abuja;Thailand>Bangkok;Vietnam>Hanoi;Saudi Arabia>Riyadh;Iran>Tehran;Iraq>Baghdad;Afghanistan>Kabul;South Korea>Seoul;Bhutan>Thimphu`,`Peru>Lima;Chile>Santiago;Colombia>Bogota;Cuba>Havana;Poland>Warsaw;Austria>Vienna;Switzerland>Bern;Belgium>Brussels;Denmark>Copenhagen;Finland>Helsinki;Ireland>Dublin;Hungary>Budapest;Ukraine>Kyiv;Ethiopia>Addis Ababa;Ghana>Accra;Morocco>Rabat;Malaysia>Kuala Lumpur;Philippines>Manila;United Arab Emirates>Abu Dhabi;Czech Republic>Prague`,`Kazakhstan>Astana;Uzbekistan>Tashkent;Mongolia>Ulaanbaatar;Myanmar>Naypyidaw;Cambodia>Phnom Penh;Laos>Vientiane;Maldives>Male;Jordan>Amman;Lebanon>Beirut;Syria>Damascus;Tunisia>Tunis;Libya>Tripoli;Sudan>Khartoum;Uganda>Kampala;Zimbabwe>Harare;Zambia>Lusaka;Romania>Bucharest;Bulgaria>Sofia;Croatia>Zagreb;Serbia>Belgrade;Iceland>Reykjavik;Venezuela>Caracas;Ecuador>Quito;Uruguay>Montevideo;Paraguay>Asuncion;Algeria>Algiers`,`Kyrgyzstan>Bishkek;Tajikistan>Dushanbe;Turkmenistan>Ashgabat;Azerbaijan>Baku;Georgia>Tbilisi;Armenia>Yerevan;Belarus>Minsk;Lithuania>Vilnius;Latvia>Riga;Estonia>Tallinn;Slovakia>Bratislava;Slovenia>Ljubljana;Albania>Tirana;North Macedonia>Skopje;Malta>Valletta;Cyprus>Nicosia;Madagascar>Antananarivo;Senegal>Dakar;Mozambique>Maputo;Namibia>Windhoek;Botswana>Gaborone;Rwanda>Kigali;Fiji>Suva;Papua New Guinea>Port Moresby;Panama>Panama City;Guatemala>Guatemala City;Jamaica>Kingston;Brunei>Bandar Seri Begawan`);
+const CNT=bk(`India>Asia;China>Asia;Egypt>Africa;Brazil>South America;Canada>North America;Australia>Oceania;France>Europe;Italy>Europe;Japan>Asia;Kenya>Africa`,`Mexico>North America;Peru>South America;Germany>Europe;Thailand>Asia;Nigeria>Africa;Argentina>South America;Spain>Europe;New Zealand>Oceania;United States>North America`,`Cuba>North America;Morocco>Africa;Chile>South America;Vietnam>Asia;Poland>Europe;Jamaica>North America;Fiji>Oceania;Ghana>Africa`,`Bolivia>South America;Mongolia>Asia;Norway>Europe;Panama>North America;Samoa>Oceania;Mali>Africa;Nepal>Asia;Uruguay>South America`,`Madagascar>Africa;Bhutan>Asia;Iceland>Europe;Guatemala>North America;Tonga>Oceania;Eritrea>Africa;Kyrgyzstan>Asia;Paraguay>South America`);
+const CONT=['Asia','Africa','Europe','North America','South America','Oceania','Antarctica'];
+const WF=bk(`Which is the largest ocean?>Pacific Ocean,Atlantic Ocean,Indian Ocean,Arctic Ocean;Which is the largest continent?>Asia,Africa,Europe,Australia;What is the tallest mountain on Earth?>Mount Everest,K2,Mont Blanc,Kilimanjaro;Which river flows through Egypt?>Nile,Amazon,Ganga,Thames;Which is the largest hot desert?>Sahara,Gobi,Thar,Kalahari`,`Which is the smallest continent?>Oceania,Europe,Antarctica,Africa;Which continent is the coldest?>Antarctica,Asia,Europe,Africa;Which is the largest island?>Greenland,Madagascar,Borneo,Sumatra;Which river flows through London?>Thames,Seine,Danube,Rhine;Which river flows through Paris?>Seine,Thames,Rhine,Tiber`,`Which is the deepest ocean trench?>Mariana Trench,Java Trench,Puerto Rico Trench,Tonga Trench;Which is the longest mountain range on land?>Andes,Alps,Himalayas,Rockies;Which continent has the most countries?>Africa,Asia,Europe,South America;Which river flows through Rome?>Tiber,Seine,Danube,Thames;Which is the tallest waterfall in the world?>Angel Falls,Niagara Falls,Victoria Falls,Iguazu Falls`,`Which is the largest lake by area?>Caspian Sea,Lake Superior,Lake Victoria,Lake Baikal;Which country is the largest by area?>Russia,Canada,China,United States;Which river flows through Baghdad?>Tigris,Euphrates,Nile,Jordan;Which river flows through Vienna?>Danube,Rhine,Elbe,Seine;Which is the driest continent?>Antarctica,Africa,Australia,Asia`);
+const STA=bk(`Kerala>Thiruvananthapuram;Tamil Nadu>Chennai;Karnataka>Bengaluru;Maharashtra>Mumbai;Gujarat>Gandhinagar;Rajasthan>Jaipur;Uttar Pradesh>Lucknow;West Bengal>Kolkata`,`Punjab>Chandigarh;Haryana>Chandigarh;Bihar>Patna;Madhya Pradesh>Bhopal;Telangana>Hyderabad;Goa>Panaji;Odisha>Bhubaneswar`,`Assam>Dispur;Himachal Pradesh>Shimla;Uttarakhand>Dehradun;Jharkhand>Ranchi;Chhattisgarh>Raipur;Sikkim>Gangtok`,`Meghalaya>Shillong;Tripura>Agartala;Manipur>Imphal;Nagaland>Kohima`,`Arunachal Pradesh>Itanagar;Mizoram>Aizawl`);
+const MON=bk(`Taj Mahal>Agra;Red Fort>Delhi;India Gate>Delhi;Gateway of India>Mumbai;Charminar>Hyderabad`,`Qutub Minar>Delhi;Hawa Mahal>Jaipur;Golden Temple>Amritsar;Mysore Palace>Mysuru;Victoria Memorial>Kolkata;Lotus Temple>Delhi`,`Meenakshi Temple>Madurai;Howrah Bridge>Kolkata;Amber Fort>Jaipur;Konark Sun Temple>Konark`);
+const IND0=bk(`What is the national animal of India?>Tiger,Lion,Elephant,Leopard;What is the national bird of India?>Peacock,Parrot,Sparrow,Eagle;What is the national flower of India?>Lotus,Rose,Marigold,Jasmine;What is the national fruit of India?>Mango,Apple,Banana,Jackfruit;Who is called the Father of the Nation in India?>Mahatma Gandhi,Jawaharlal Nehru,Sardar Patel,Subhas Chandra Bose;On which date is Independence Day celebrated in India?>15 August,26 January,2 October,14 November;On which date is Republic Day celebrated in India?>26 January,15 August,2 October,5 September;What is the capital of India?>New Delhi,Mumbai,Kolkata,Chennai`,`What is the national river of India?>Ganga,Yamuna,Brahmaputra,Godavari;What is the national tree of India?>Banyan,Neem,Peepal,Mango;What is the national currency of India?>Indian Rupee,Dollar,Dinar,Taka;Who was the first Prime Minister of India?>Jawaharlal Nehru,Sardar Patel,Lal Bahadur Shastri,Indira Gandhi;Who was the first President of India?>Dr Rajendra Prasad,Dr S Radhakrishnan,Dr Zakir Husain,Dr A P J Abdul Kalam;What is the national song of India?>Vande Mataram,Jana Gana Mana,Saare Jahan Se Achha,Vande Bharat;What is the national anthem of India?>Jana Gana Mana,Vande Mataram,Saare Jahan Se Achha,Sare Bharat;On which date is Gandhi Jayanti celebrated?>2 October,15 August,26 January,14 November;Which is the largest state in India by area?>Rajasthan,Madhya Pradesh,Maharashtra,Uttar Pradesh;Which is the smallest state in India by area?>Goa,Sikkim,Tripura,Kerala;Which is the most populous state in India?>Uttar Pradesh,Maharashtra,Bihar,West Bengal`,`Who is known as the architect of the Indian Constitution?>Dr B R Ambedkar,Jawaharlal Nehru,Sardar Patel,Dr Rajendra Prasad;Who wrote the national anthem of India?>Rabindranath Tagore,Bankim Chandra Chatterjee,Sarojini Naidu,Subramania Bharati;Who wrote Vande Mataram?>Bankim Chandra Chatterjee,Rabindranath Tagore,Sarojini Naidu,Muhammad Iqbal;What is the national emblem of India based on?>Lion Capital of Ashoka,Konark Wheel,Lotus Flower,Peacock Throne;What is the national aquatic animal of India?>Ganges River Dolphin,Blue Whale,Olive Ridley Turtle,Saltwater Crocodile;How many states are there in India?>28,25,29,30;Which colour is at the top of the Indian flag?>Saffron,White,Green,Blue;Which colour is at the bottom of the Indian flag?>Green,White,Saffron,Blue;Which city is known as the City of Joy?>Kolkata,Mumbai,Chennai,Delhi;Which city is called the Silicon Valley of India?>Bengaluru,Hyderabad,Pune,Chennai`,`On which date did the Indian Constitution come into effect?>26 January 1950,15 August 1947,26 November 1949,2 October 1950;How many spokes does the Ashoka Chakra have?>24,12,16,32;On which date is Teachers' Day celebrated in India?>5 September,14 November,2 October,15 August;On which date is Children's Day celebrated in India?>14 November,5 September,2 October,26 January;Which Indian state is known as the land of five rivers?>Punjab,Haryana,Rajasthan,Gujarat`,`Who was the chairman of the Drafting Committee of the Indian Constitution?>Dr B R Ambedkar,Jawaharlal Nehru,Sardar Patel,Dr Rajendra Prasad;On which date was the Indian Constitution adopted?>26 November 1949,26 January 1950,15 August 1947,2 October 1949;Which is the national heritage animal of India?>Elephant,Tiger,Peacock,Lion;Which Indian state has the longest coastline?>Gujarat,Maharashtra,Kerala,Tamil Nadu;Which Indian city is called the Pink City?>Jaipur,Jodhpur,Udaipur,Jaisalmer`);
+const IND2=bk(`Which colour is in the middle of the Indian flag?>White,Saffron,Green,Blue;Which festival is called the festival of lights?>Diwali,Holi,Eid,Pongal;Which festival is celebrated with colours?>Holi,Diwali,Onam,Baisakhi;Which ocean lies to the south of India?>Indian Ocean,Pacific Ocean,Atlantic Ocean,Arctic Ocean;Which mountain range lies in the north of India?>Himalayas,Western Ghats,Aravalli,Vindhya`,`What is shown in the middle of the Indian flag?>Ashoka Chakra,Lotus,Sun,Charkha;Which is the harvest festival of Kerala?>Onam,Pongal,Bihu,Lohri;Which is the harvest festival of Tamil Nadu?>Pongal,Onam,Bihu,Lohri;Which language is the official language of the Union Government along with English?>Hindi,Tamil,Bengali,Marathi;Which desert is found in Rajasthan?>Thar Desert,Gobi Desert,Sahara Desert,Kalahari Desert;Which state is known as God's Own Country?>Kerala,Goa,Karnataka,Tamil Nadu;In which year did India become independent?>1947,1950,1942,1857;Which agency launched Chandrayaan?>ISRO,NASA,DRDO,BARC`,`Which is the harvest festival of Assam?>Bihu,Onam,Pongal,Lohri;Which is the highest peak in India?>Kanchenjunga,Nanda Devi,Mount Everest,K2;Who was the first woman Prime Minister of India?>Indira Gandhi,Sarojini Naidu,Pratibha Patil,Sonia Gandhi;Who is known as the Iron Man of India?>Sardar Vallabhbhai Patel,Jawaharlal Nehru,Subhas Chandra Bose,Bhagat Singh;Who is known as the Missile Man of India?>Dr A P J Abdul Kalam,Dr Vikram Sarabhai,Dr Homi Bhabha,Dr C V Raman;Who wrote Gitanjali?>Rabindranath Tagore,Bankim Chandra Chatterjee,Premchand,Sarojini Naidu;In which year did India become a republic?>1950,1947,1949,1952;Who led the Dandi March?>Mahatma Gandhi,Jawaharlal Nehru,Sardar Patel,Subhas Chandra Bose`,`Which is the longest river in peninsular India?>Godavari,Krishna,Kaveri,Narmada;Which Indian city is known as the Garden City?>Bengaluru,Pune,Mysuru,Chandigarh;Who was the first woman President of India?>Pratibha Patil,Indira Gandhi,Sarojini Naidu,Droupadi Murmu;Who was the first Vice President of India?>Dr S Radhakrishnan,Dr Zakir Husain,V V Giri,Dr Rajendra Prasad;Who gave the slogan Jai Jawan Jai Kisan?>Lal Bahadur Shastri,Jawaharlal Nehru,Sardar Patel,Indira Gandhi;Who wrote The Discovery of India?>Jawaharlal Nehru,Mahatma Gandhi,Rabindranath Tagore,Sardar Patel;In which year was the Jallianwala Bagh massacre?>1919,1857,1942,1930;In which year did the Quit India Movement begin?>1942,1930,1919,1947;Which was India's first satellite?>Aryabhata,Bhaskara,INSAT-1A,Rohini;Which mission put an Indian spacecraft in orbit around Mars?>Mangalyaan,Chandrayaan,Aditya,Gaganyaan`,`Which is the smallest Union Territory of India by area?>Lakshadweep,Puducherry,Chandigarh,Delhi`);
+const IND=IND0.concat(IND2);
+const CITIES=['Agra','Delhi','Mumbai','Hyderabad','Jaipur','Amritsar','Mysuru','Kolkata','Madurai','Konark','Chennai','Lucknow','Bhopal','Patna'];
+const ACR=bk(`CPU>Central Processing Unit;RAM>Random Access Memory;USB>Universal Serial Bus;PDF>Portable Document Format;OS>Operating System;AI>Artificial Intelligence;WWW>World Wide Web`,`ROM>Read Only Memory;URL>Uniform Resource Locator;GPS>Global Positioning System;SMS>Short Message Service;LAN>Local Area Network;GUI>Graphical User Interface;ISP>Internet Service Provider;HTML>HyperText Markup Language`,`WAN>Wide Area Network;HTTP>HyperText Transfer Protocol;IP>Internet Protocol;CSS>Cascading Style Sheets;SSD>Solid State Drive;HDD>Hard Disk Drive;VPN>Virtual Private Network;PNG>Portable Network Graphics`,`SQL>Structured Query Language;BIOS>Basic Input Output System;DNS>Domain Name System;JPEG>Joint Photographic Experts Group;ASCII>American Standard Code for Information Interchange;GPU>Graphics Processing Unit;API>Application Programming Interface;IDE>Integrated Development Environment`,`TCP>Transmission Control Protocol;FTP>File Transfer Protocol;SMTP>Simple Mail Transfer Protocol;DHCP>Dynamic Host Configuration Protocol;UDP>User Datagram Protocol;RAID>Redundant Array of Independent Disks;SSL>Secure Sockets Layer;LCD>Liquid Crystal Display;LED>Light Emitting Diode;OCR>Optical Character Recognition;XML>Extensible Markup Language`);
+const HWD=['an input device','an output device','temporary memory','permanent storage','the brain of the computer','the main circuit board','handles graphics','connects computers to a network'];
+const HW=bk(`mouse>an input device;keyboard>an input device;monitor>an output device;printer>an output device;speaker>an output device;CPU>the brain of the computer`,`scanner>an input device;microphone>an input device;webcam>an input device;projector>an output device;RAM>temporary memory;hard disk>permanent storage`,`motherboard>the main circuit board;GPU>handles graphics;router>connects computers to a network;joystick>an input device;headphones>an output device;SSD>permanent storage`);
+const EXT=bk(`.jpg>an image file;.png>an image file;.mp3>an audio file;.mp4>a video file;.docx>a Word document;.txt>a plain text file`,`.xlsx>an Excel spreadsheet;.pptx>a PowerPoint presentation;.pdf>a PDF document;.html>a web page;.zip>a compressed archive;.wav>an audio file`,`.exe>a program that can run;.py>Python source code;.csv>a data file with comma separated values;.css>a style sheet;.gif>an image file;.avi>a video file`);
+const EXD=['an image file','an audio file','a video file','a Word document','an Excel spreadsheet','a PowerPoint presentation','a PDF document','a plain text file','a web page','a compressed archive','a program that can run','Python source code','a style sheet'];
+const SHC=bk(`Ctrl+C>Copy;Ctrl+V>Paste;Ctrl+X>Cut;Ctrl+Z>Undo;Ctrl+S>Save;Ctrl+P>Print`,`Ctrl+A>Select all;Ctrl+F>Find;Ctrl+Y>Redo;Ctrl+B>Bold;Ctrl+I>Italic;Ctrl+U>Underline`,`Alt+Tab>Switch between open windows;Windows+D>Show the desktop;F5>Refresh the page`);
+const SHD=['Copy','Paste','Cut','Undo','Redo','Save','Print','Select all','Find','Bold','Italic','Underline','Switch between open windows','Show the desktop','Refresh the page'];
+const binq=L=>{const bits=Math.min(10,Math.floor(L)+1),n=ri(2,2**bits-1);if(R()<.5){const ans=n.toString(2),w=[];for(let k=0;k<30&&w.length<3;k++){const v=(n^(1<<ri(0,bits-1))).toString(2);if(v!==ans&&!w.includes(v))w.push(v)}return [`Convert ${n} to binary.`,ans,w]}return [`Convert the binary number ${n.toString(2)} to decimal.`,n]};
+const mix=(...f)=>L=>pc(f)(L);
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const HEV=bk(`India became independent>1947;India became a republic>1950;Columbus reached the Americas>1492;the first humans walked on the Moon>1969;World War II ended>1945;World War I began>1914`,`the Titanic sank>1912;the Berlin Wall fell>1989;Mahatma Gandhi led the Dandi March>1930;the French Revolution began>1789;the first modern Olympic Games were held in Athens>1896;the American Declaration of Independence was signed>1776;Vasco da Gama reached Calicut>1498;the Quit India Movement began>1942;Mahatma Gandhi was born>1869;India won the Cricket World Cup for the first time>1983`,`the Battle of Plassey was fought>1757;the Revolt of 1857 began>1857;the Jallianwala Bagh massacre took place>1919;the Russian Revolution took place>1917;the Magna Carta was signed>1215;the First Battle of Panipat was fought>1526;Akbar became the Mughal emperor>1556;Bengal was partitioned by the British>1905;the Indian National Congress was founded>1885;the Soviet Union broke up>1991;India launched its first satellite Aryabhata>1975`,`the Battle of Hastings was fought>1066;the Black Death reached Europe>1347;Constantinople fell to the Ottomans>1453;the Battle of Waterloo was fought>1815;the Battle of Buxar was fought>1764;the Third Battle of Panipat was fought>1761;Shivaji was crowned Chhatrapati>1674;the Indian Constitution was adopted>1949;the Chernobyl disaster happened>1986;the Bhopal gas tragedy happened>1984`,`the Battle of Tours was fought>732;Charlemagne was crowned emperor>800;Genghis Khan was proclaimed ruler of the Mongols>1206;the Second Battle of Tarain was fought>1192;the Battle of Talikota was fought>1565;the Peace of Westphalia was signed>1648;the Glorious Revolution took place in England>1688;the Treaty of Tordesillas was signed>1494;Martin Luther published his 95 Theses>1517;Napoleon became Emperor of France>1804;the First Opium War began>1839;the Meiji Restoration began in Japan>1868;the partition of Bengal was undone>1911`);
+const HPR=bk(`Who is known as the Father of the Nation in India?>Mahatma Gandhi,Jawaharlal Nehru,Sardar Patel,Subhas Chandra Bose;Who was the first Prime Minister of India?>Jawaharlal Nehru,Sardar Patel,Lal Bahadur Shastri,Indira Gandhi;Who sailed across the Atlantic and reached the Americas in 1492?>Christopher Columbus,Vasco da Gama,Marco Polo,Ferdinand Magellan;Who built the Taj Mahal?>Shah Jahan,Akbar,Babur,Aurangzeb;Who was the first person to walk on the Moon?>Neil Armstrong,Buzz Aldrin,Yuri Gagarin,Michael Collins;Who was the first Mughal emperor?>Babur,Akbar,Humayun,Shah Jahan;Which ancient civilisation built the pyramids of Giza?>Egyptian,Roman,Greek,Mayan`,`Who was the first woman Prime Minister of India?>Indira Gandhi,Sarojini Naidu,Pratibha Patil,Sonia Gandhi;Who was the first Indian to travel in space?>Rakesh Sharma,Kalpana Chawla,Ravish Malhotra,Sunita Williams;Which emperor built the Red Fort in Delhi?>Shah Jahan,Akbar,Aurangzeb,Humayun;Who became Emperor of France in 1804?>Napoleon Bonaparte,Louis XIV,Charlemagne,Julius Caesar;Who was the first woman to win a Nobel Prize?>Marie Curie,Mother Teresa,Florence Nightingale,Rosalind Franklin;Who was the British Prime Minister for most of World War II?>Winston Churchill,Neville Chamberlain,Clement Attlee,Margaret Thatcher;Who is known as the Lady with the Lamp?>Florence Nightingale,Marie Curie,Mother Teresa,Sarojini Naidu;Who was the first President of India?>Dr Rajendra Prasad,Dr S Radhakrishnan,Dr Zakir Husain,Dr A P J Abdul Kalam`,`Who founded the Maurya Empire?>Chandragupta Maurya,Ashoka,Bindusara,Harsha;Who was the last Mughal emperor?>Bahadur Shah Zafar,Aurangzeb,Jahangir,Akbar II;Which Mughal emperor started Din-i-Ilahi?>Akbar,Jahangir,Shah Jahan,Aurangzeb;Who was the first Governor-General of independent India?>Lord Mountbatten,C Rajagopalachari,Lord Curzon,Lord Dalhousie;Who led the Indian National Army in Southeast Asia?>Subhas Chandra Bose,Mahatma Gandhi,Bhagat Singh,Lala Lajpat Rai;Who was the teacher of Alexander the Great?>Aristotle,Plato,Socrates,Pythagoras;Who founded Sikhism?>Guru Nanak,Guru Gobind Singh,Guru Arjan,Guru Tegh Bahadur;Who founded Buddhism?>Gautama Buddha,Mahavira,Ashoka,Chanakya`,`Who wrote the Arthashastra?>Kautilya,Kalidasa,Aryabhata,Banabhatta;Which Chinese traveller visited India during the reign of Harsha?>Hiuen Tsang,Fa-Hien,Marco Polo,Ibn Battuta;Which Delhi Sultan shifted the capital to Daulatabad?>Muhammad bin Tughluq,Alauddin Khalji,Iltutmish,Firoz Shah Tughluq;Who defeated Ibrahim Lodi at Panipat in 1526?>Babur,Humayun,Akbar,Sher Shah Suri;Who founded the Maratha Empire?>Shivaji,Sambhaji,Baji Rao I,Shahu;Who led the 1857 revolt at Jhansi?>Rani Lakshmibai,Begum Hazrat Mahal,Tantia Tope,Nana Sahib;Which Governor-General introduced the Doctrine of Lapse?>Lord Dalhousie,Lord Wellesley,Lord Cornwallis,Lord Curzon;Which ruler fought the Kalinga War?>Ashoka,Chandragupta Maurya,Harsha,Samudragupta`,`Which Chola king invaded Southeast Asia?>Rajendra Chola I,Raja Raja Chola I,Kulothunga Chola,Vijayalaya Chola;Who built the Brihadeeswarar Temple at Thanjavur?>Raja Raja Chola I,Rajendra Chola I,Krishnadevaraya,Pulakeshin II;Which Vijayanagara ruler is known as the greatest of the dynasty?>Krishnadevaraya,Harihara I,Bukka Raya I,Devaraya II;Who was the Greek ambassador at the court of Chandragupta Maurya?>Megasthenes,Seleucus,Alexander,Ptolemy;Which treaty ended World War I with Germany?>Treaty of Versailles,Treaty of Paris,Treaty of Vienna,Treaty of Tilsit;Who was the first Roman emperor?>Augustus,Julius Caesar,Nero,Constantine`);
+const SPQ=bk(`How many rings are on the Olympic flag?>5,4,6,7;Which sport is played at Wimbledon?>Tennis,Cricket,Golf,Hockey;In which sport are stumps, bails and a bat used?>Cricket,Baseball,Hockey,Golf;Which sport is Neeraj Chopra famous for?>Javelin throw,Shot put,High jump,Discus throw`.replace('stumps, bails','stumps and bails'),`How often are the Summer Olympic Games held?>Every 4 years,Every 2 years,Every 3 years,Every year;Which city hosted the 2016 Summer Olympics?>Rio de Janeiro,Beijing,Tokyo,London;Which city hosted the 2020 Summer Olympics, held in 2021?>Tokyo,Rio de Janeiro,Paris,Beijing;Which country won the FIFA World Cup in 2022?>Argentina,France,Brazil,Croatia;Who is known as the Master Blaster of cricket?>Sachin Tendulkar,Virat Kohli,Rahul Dravid,MS Dhoni;In which sport did P V Sindhu win Olympic medals?>Badminton,Tennis,Table tennis,Squash;In which city were the first modern Olympic Games held in 1896?>Athens,Paris,London,Rome;Which team won the first Cricket World Cup in 1975?>West Indies,Australia,India,England;Which sport is Mary Kom associated with?>Boxing,Wrestling,Archery,Weightlifting`.replace('2020 Summer Olympics, held in 2021','2020 Summer Olympics (held in 2021)'),`Who captained India to the 1983 Cricket World Cup win?>Kapil Dev,Sunil Gavaskar,Sachin Tendulkar,MS Dhoni;Who captained India to the 2011 Cricket World Cup win?>MS Dhoni,Virat Kohli,Rahul Dravid,Sourav Ganguly;Which Indian won an individual shooting gold at the 2008 Olympics?>Abhinav Bindra,Gagan Narang,Vijay Kumar,Rajyavardhan Rathore;Which country has won the most FIFA World Cups?>Brazil,Germany,Italy,Argentina;Which sport is Saina Nehwal known for?>Badminton,Tennis,Squash,Table tennis;In chess, which piece can only move diagonally?>Bishop,Rook,Knight,Queen;How many squares are there on a chessboard?>64,32,81,100;Who was the first Indian chess Grandmaster?>Viswanathan Anand,Pentala Harikrishna,Koneru Humpy,Dibyendu Barua;How long is a full marathon in kilometres?>42.195,40,45,50`.replace('In chess, which','In chess which'),`Which country has won the most Olympic gold medals overall?>United States,China,Soviet Union,Great Britain;Which Indian athlete won the javelin gold at the 2018 Asian Games?>Neeraj Chopra,Devender Singh Kang,Shivpal Singh,Kashinath Naik;In which country did the game of cricket begin?>England,India,Australia,West Indies;In which country did the game of chess originate?>India,China,Persia,Egypt;In which sport is the Ryder Cup played?>Golf,Tennis,Cricket,Polo;In which sport is the Davis Cup played?>Tennis,Badminton,Golf,Squash`,`Who has won the most Olympic gold medals of all time?>Michael Phelps,Usain Bolt,Carl Lewis,Mark Spitz;Who holds the men's 100 metres world record?>Usain Bolt,Carl Lewis,Justin Gatlin,Tyson Gay;Who was the first Indian woman to win an individual Olympic medal?>Karnam Malleswari,P V Sindhu,Mary Kom,Saina Nehwal;Which country hosted the first FIFA World Cup in 1930?>Uruguay,Brazil,Italy,France;In which year were the first Winter Olympic Games held?>1924,1896,1936,1948;How many gold medals did India win at the Tokyo 2020 Olympics?>1,2,3,0`);
+const SPS=['Badminton','Cricket','Basketball','Tennis','Boxing','Ice hockey','Athletics','Archery','Rowing','Gymnastics','Rugby','Golf','Weightlifting','Fencing','Canoeing','Football','Hockey','Kabaddi','Cycling','American football'];
+const EQP=bk(`shuttlecock>Badminton;stumps and bails>Cricket;hoop and backboard>Basketball;racket and net>Tennis;boxing gloves>Boxing`,`puck>Ice hockey;javelin>Athletics;bow and arrow>Archery;oars>Rowing;pommel horse>Gymnastics;scrum>Rugby`,`bunker and fairway>Golf;dumbbells>Weightlifting;epee and foil>Fencing;kayak>Canoeing;discus>Athletics`);
+const TRO=bk(`Wimbledon>Tennis;Indian Premier League>Cricket;Ranji Trophy>Cricket;Pro Kabaddi League>Kabaddi;Indian Super League>Football`,`Davis Cup>Tennis;Thomas Cup>Badminton;Santosh Trophy>Football;Duleep Trophy>Cricket;Ashes>Cricket;Ryder Cup>Golf;Tour de France>Cycling`,`Stanley Cup>Ice hockey;Super Bowl>American football;Uber Cup>Badminton;Durand Cup>Football;Hockey India League>Hockey;Subroto Cup>Football`);
+const PCT=bk(`cricket>11;football>11;hockey>11;basketball>5`,`volleyball>6;kabaddi>7;baseball>9`,`rugby union>15;handball>7;water polo>7;kho kho>9`);
+const hist=mix(ask(HEV,a=>`In which year did this happen? ${cap(a)}.`,b=>`Which of these happened in ${b}?`,null,1),qa(HPR,1));
+const sports=mix(qa(SPQ,1),ask(EQP,a=>`Which sport uses ${a}?`,null,SPS,1),ask(TRO,a=>`Which sport is linked with the ${a}?`,null,SPS,1),ask(PCT,a=>`How many players of one team play at a time in ${a}?`,null,null,1));
+const CG=[
+ L=>GEN[pc([0,1,2,6])](L),
+ L=>GEN[pc([3,4,7])](L),
+ L=>GEN[pc([8,5,9])](L),
+ mix(ask(ANT,a=>`What is the opposite of "${a}"?`,b=>`What is the opposite of "${b}"?`),ask(SYN,a=>`Which word means almost the same as "${a}"?`),spell,spell),
+ mix(plural,past,ask(POS,a=>`What part of speech is "${a}"?`,null,['noun','verb','adjective','adverb'])),
+ mix(ask(ACL,a=>`Which group of animals does a ${a} belong to?`,null,CLS),ask(DIET,a=>`Which best describes a ${a}?`,null,['herbivore','carnivore','omnivore','decomposer']),ask(BODY,a=>`Which of these describes the ${a}?`)),
+ mix(ask(ELS,a=>`Which element has the symbol "${a}"?`,b=>`What is the symbol for ${b}?`),ask(ATN,a=>`Which element has atomic number ${a}?`),ask(UNIT,a=>`What is the SI unit of ${a}?`),ask(PLN,a=>/^\d$/.test(a)?`Which planet is number ${a} from the Sun, counting outwards?`:`Which planet is ${a}?`,null,PLS),ask(CHG,a=>`Which change of state is ${a}?`,null,['solid to liquid','liquid to solid','liquid to gas','gas to liquid','solid to gas','gas to solid']),ask(FRM,a=>`What is the chemical formula of ${a}?`,b=>`Which substance has the formula ${b}?`)),
+ mix(ask(CAP,a=>`What is the capital of ${a}?`,b=>`${b} is the capital of which country?`),ask(CNT,a=>`On which continent is ${a}?`,null,CONT),qa(WF)),
+ mix(ask(STA,a=>`What is the capital of ${a}?`),ask(MON,a=>`In which city is the ${a}?`,null,CITIES),qa(IND)),
+ L=>pc(L>=4?[ask(ACR,a=>`What does ${a} stand for?`,b=>`${b} is the full form of which term?`),ask(HW,a=>`Which best describes a ${a}?`,null,HWD),ask(EXT,a=>`What kind of file is ${a}?`,null,EXD),ask(SHC,a=>`What does ${a} do?`,null,SHD),binq,binq]:[ask(ACR,a=>`What does ${a} stand for?`,b=>`${b} is the full form of which term?`),ask(HW,a=>`Which best describes a ${a}?`,null,HWD),ask(EXT,a=>`What kind of file is ${a}?`,null,EXD),ask(SHC,a=>`What does ${a} do?`,null,SHD)])(L),
+ hist,sports
+];
+/* quiz screens */
+const GN=Array.from({length:12},(_,i)=>'Grade '+(i+1)).concat('Higher studies');
+const LVL=['Beginner','Beginner','Easy','Easy','Easy','Medium','Medium','Medium','Hard','Hard','Hard','Expert','Advanced'];
+const CATS=[['Number skills','Arithmetic, fractions, word problems'],['Algebra and geometry','Equations, shapes, measurement'],['Logic and patterns','Puzzles, series, chance and data'],['Vocabulary and spelling','Opposites, synonyms, spelling'],['Grammar','Plurals, tenses, parts of speech'],['Life science','Animals, the body and plants'],['Physical science','Elements, units, planets, formulas'],['World geography','Capitals, continents, landmarks'],['India and civics','States, symbols, leaders, dates'],['Computers and technology','Terms, devices, files, binary'],['History','Events, dates and great leaders'],['Sports and games','Rules, players and trophies']];
+const mb=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+let qz=Object.assign({best:{},wrong:[],custom:[],daily:{last:'',streak:0,best:0},timed:false},load('quiz2',{})),qlv=0,qcat=-1,qr=null,qtm=null,draft={title:'',qs:[]};
+const qsave=()=>save('quiz2',qz);
+const qshow=v=>['qzGrades','qzCats','qzPlay','qzDone','qzMine'].forEach(id=>{$('#'+id).hidden=id!==v});
+function qStreak(){const d=qz.daily,y=new Date();y.setDate(y.getDate()-1);return d.last===dstr(new Date())||d.last===dstr(y)?d.streak:0}
+function qGrades(){qshow('qzGrades');clearInterval(qtm);$('#qzSub').textContent='Pick your grade to start. The questions get harder as the grade goes up.';
+  $('#qzTop').innerHTML=`<span>Daily streak: <b>${qStreak()}</b> day${qStreak()===1?'':'s'}</span><button type="button" class="btn alt" id="qzRev">Review my mistakes (${qz.wrong.length})</button><button type="button" class="btn alt" id="qzMineBtn">My quizzes</button>`;
+  $('#qzGradeList').innerHTML=GN.map((g,i)=>`<button type="button" class="qg" data-lv="${i+1}"><b>${g}</b><span>${LVL[i]}</span></button>`).join('')}
+function qCats(){qshow('qzCats');clearInterval(qtm);$('#qzSub').textContent=GN[qlv-1]+' \u00b7 '+LVL[qlv-1]+' level';$('#qzGradeName').textContent=GN[qlv-1];$('#qzTimed').checked=!!qz.timed;
+  const done=qz.daily.last===dstr(new Date());$('#qzDaily').innerHTML=`<div><b>Daily challenge</b><br><span class="empty">One question from every subject. New each day. Streak: ${qStreak()} day${qStreak()===1?'':'s'}${done?' \u00b7 done today, you can play again':''}</span></div><button type="button" class="btn" id="qzDailyGo">${done?'Play again':'Start'}</button>`;
+  $('#qzCatList').innerHTML=CATS.map((c,i)=>{const b=qz.best[qlv+'-'+i];return `<div class="qg"><b>${c[0]}</b><span>${c[1]}</span><span class="qbest">${b?'Best: '+b.p+'%':'Not tried yet'}</span><div class="row" style="margin:.6rem 0 0"><button type="button" class="btn alt" data-c="${i}" data-n="10">Quick 10</button><button type="button" class="btn" data-c="${i}" data-n="50">All 50</button></div></div>`}).join('')}
+function qStartList(list,o){clearInterval(qtm);qr=Object.assign({qs:list,i:0,score:0,wrong:[],fixed:[],n:list.length,ans:false,timed:!!qz.timed&&!(o&&o.notimed)},o||{});qshow('qzPlay');qAsk()}
+function qStart(c,n){qcat=c;const set=getSet(qlv,c);let idx=set.map((_,i)=>i);if(n<50)idx=shuf(idx).slice(0,n).sort((a,b)=>a-b);qStartList(idx.map(i=>set[i]),{again:()=>qStart(c,n)})}
+function qDaily(){const t=dstr(new Date()),rg=mb([...(t+qlv)].reduce((h,ch)=>(h*31+ch.charCodeAt(0))|0,7));qcat=-1;qStartList(CATS.map((_,c)=>getSet(qlv,c)[Math.floor(rg()*50)]),{daily:true,label:'Daily challenge \u00b7 '+GN[qlv-1]})}
+function qReview(list){qcat=-1;qStartList(list.map(x=>({q:x.q,o:x.o,c:x.c})),{review:true,notimed:true,label:'Review mistakes'})}
+function qPlayCustom(i){const c=qz.custom[i];qcat=-1;const qs=c.qs.map(x=>{const p=x.o.map((t,k)=>[t,k===x.c]);shuf(p);return{q:x.q,o:p.map(v=>v[0]),c:p.findIndex(v=>v[1])}});qStartList(shuf(qs),{custom:true,label:c.title,again:()=>qPlayCustom(i)})}
+function qClock(){clearInterval(qtm);const el=$('#qzTime');if(!qr.timed){el.textContent='';return}qr.t=20;el.textContent='\u23f1 20s';qtm=setInterval(()=>{qr.t--;el.textContent='\u23f1 '+qr.t+'s';if(qr.t<=0){clearInterval(qtm);qPick(-1)}},1000)}
+function qAsk(){const q=qr.qs[qr.i];qr.ans=false;$('#qzInfo').textContent=`${qr.label||GN[qlv-1]+' \u00b7 '+CATS[qcat][0]} \u00b7 Question ${qr.i+1} of ${qr.n}`;$('#qzBar').style.width=(qr.i/qr.n*100)+'%';$('#qzQ').textContent=q.q;
+  $('#qzOpts').innerHTML=q.o.map((o,k)=>`<button type="button" class="qopt" data-k="${k}"><b>${k+1}</b>${esc(o)}</button>`).join('');$('#qzFb').textContent='';$('#qzFb').style.color='';$('#qzNext').hidden=true;qClock()}
+function qPick(k){if(!qr||qr.ans)return;qr.ans=true;clearInterval(qtm);const q=qr.qs[qr.i],bs=$$('#qzOpts .qopt'),fb=$('#qzFb');bs[q.c].classList.add('ok');
+  if(k===q.c){qr.score++;qr.fixed.push(q);fb.textContent='Correct!';fb.style.color='var(--ok)'}else{if(bs[k])bs[k].classList.add('bad');qr.wrong.push({q:q.q,a:q.o[q.c],full:q});fb.textContent=(k<0?'Time is up. ':'Not quite. ')+'The answer is '+q.o[q.c]+'.';fb.style.color='var(--bad)'}
+  $('#qzNext').textContent=qr.i+1<qr.n?'Next question':'See results';$('#qzNext').hidden=false;$('#qzNext').focus()}
+function qFinish(){clearInterval(qtm);const p=Math.round(qr.score/qr.n*100);qr.p=p;const key=qlv+'-'+qcat,b=qz.best[key];
+  if(!qr.daily&&!qr.review&&!qr.custom&&qcat>=0&&(!b||p>b.p||(p===b.p&&qr.n>b.n))){qz.best[key]={p,n:qr.n}}
+  if(!qr.custom){qr.wrong.forEach(w=>{if(!qz.wrong.some(x=>x.q===w.full.q&&x.o[x.c]===w.a))qz.wrong.push({q:w.full.q,o:w.full.o,c:w.full.c})});if(qr.review)qz.wrong=qz.wrong.filter(x=>!qr.fixed.some(f=>f.q===x.q&&f.o[f.c]===x.o[x.c]));qz.wrong=qz.wrong.slice(-200)}
+  let dm='';if(qr.daily){const t=dstr(new Date()),y=new Date();y.setDate(y.getDate()-1);const d=qz.daily;if(d.last!==t){d.streak=d.last===dstr(y)?d.streak+1:1;d.last=t;d.best=Math.max(d.best,d.streak)}dm=`Daily streak: ${d.streak} day${d.streak===1?'':'s'} (best ${d.best})`}
+  qsave();qshow('qzDone');$('#qzScore').textContent=`${qr.score} out of ${qr.n} \u00b7 ${p}%`;$('#qzMsg').textContent=p>=90?'Outstanding work!':p>=70?'Well done! Keep it up.':p>=50?'Good effort. A little more practice will help.':'Keep practising. You will get there.';$('#qzDailyMsg').textContent=dm;
+  $('#qzAgain').hidden=!qr.again;$('#qzReviewBtn').hidden=!qr.wrong.length||!!qr.custom;$('#qzCertBtn').hidden=!(p>=80&&qr.n>=10&&!qr.custom);
+  $('#qzWrongH').hidden=!qr.wrong.length;$('#qzWrong').innerHTML=qr.wrong.slice(0,25).map(w=>`<li class="task"><span>${esc(w.q)} \u2192 <b>${esc(w.a)}</b></span></li>`).join('')}
+function showCert(){const u=users()[me.email];$('#certName').textContent=u.name;$('#certLine').textContent=`scored ${qr.p}% (${qr.score} out of ${qr.n}) in ${qr.label||GN[qlv-1]+' \u00b7 '+CATS[qcat][0]}`;$('#certDate').textContent=new Date().toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});$('#cert').hidden=false}
+function renderDraft(){$('#cqDraft').innerHTML=draft.qs.length?draft.qs.map((x,i)=>`<li class="task"><span>${esc(x.q)} \u2192 <b>${esc(x.o[x.c])}</b></span><button class="x" data-cqd="${i}" aria-label="Remove question">\u2715</button></li>`).join(''):'<li class="empty">No questions added yet.</li>'}
+function renderCustom(){$('#cqList').innerHTML=qz.custom.length?qz.custom.map((c,i)=>`<li class="task"><span>${esc(c.title)} <small style="color:var(--muted)">\u00b7 ${c.qs.length} questions</small></span><button class="btn alt" data-cqp="${i}" type="button">Play</button><button class="btn alt" data-cqs="${i}" type="button">Share code</button><button class="x" data-cqx="${i}" aria-label="Delete quiz">\u2715</button></li>`).join(''):'<li class="empty">No saved quizzes yet.</li>'}
+function qMine(){qshow('qzMine');clearInterval(qtm);$('#qzSub').textContent='Make quizzes for yourself and your friends.';$('#cqTitle').value=draft.title;renderDraft();renderCustom()}
+$('#qzGradeList').onclick=e=>{const b=e.target.closest('[data-lv]');if(b){qlv=+b.dataset.lv;qCats()}};
+$('#qzTop').onclick=e=>{if(e.target.id==='qzRev'){if(!qz.wrong.length){toast('No mistakes saved yet. Take a quiz first.');return}qReview(shuf([...qz.wrong]).slice(0,20))}if(e.target.id==='qzMineBtn')qMine()};
+$('#qzDaily').onclick=e=>{if(e.target.id==='qzDailyGo')qDaily()};
+$('#qzTimed').onchange=e=>{qz.timed=e.target.checked;qsave()};
+$('#qzCatList').onclick=e=>{const b=e.target.closest('[data-n]');if(b)qStart(+b.dataset.c,+b.dataset.n)};
+$('#qzOpts').onclick=e=>{const b=e.target.closest('[data-k]');if(b)qPick(+b.dataset.k)};
+$('#qzNext').onclick=()=>{qr.i++;if(qr.i>=qr.n)qFinish();else qAsk()};
+$('#qzBackG').onclick=qGrades;$('#qzGradesBtn').onclick=qGrades;$('#qzCatsBtn').onclick=()=>qlv?qCats():qGrades();$('#qzQuit').onclick=()=>{clearInterval(qtm);qlv?(qr&&(qr.custom||qr.review)?qGrades():qCats()):qGrades()};$('#qzMineBack').onclick=qGrades;
+$('#qzAgain').onclick=()=>qr.again&&qr.again();
+$('#qzReviewBtn').onclick=()=>qReview(qr.wrong.map(w=>w.full));
+$('#qzCertBtn').onclick=showCert;$('#certClose').onclick=()=>{$('#cert').hidden=true};
+$('#certPrint').onclick=()=>{document.body.classList.add('certprint');try{window.print()}catch(e){toast('Use your browser menu to print')}setTimeout(()=>document.body.classList.remove('certprint'),600)};
+$('#cqAdd').onclick=()=>{const q=$('#cqQ').value.trim(),a=$('#cqA').value.trim(),w=['#cqW1','#cqW2','#cqW3'].map(s=>$(s).value.trim()).filter(Boolean);if(!q||!a||!w.length){toast('Add a question, the right answer and at least one wrong answer');return}draft.title=$('#cqTitle').value;draft.qs.push({q,o:[a,...new Set(w.filter(v=>v!==a))],c:0});['#cqQ','#cqA','#cqW1','#cqW2','#cqW3'].forEach(s=>{$(s).value=''});renderDraft()};
+$('#cqDraft').onclick=e=>{const i=e.target.dataset.cqd;if(i!==undefined){draft.qs.splice(+i,1);renderDraft()}};
+$('#cqSave').onclick=()=>{const t=$('#cqTitle').value.trim();if(!t||!draft.qs.length){toast('Give your quiz a title and add at least one question');return}qz.custom.push({title:t,qs:draft.qs});draft={title:'',qs:[]};$('#cqTitle').value='';qsave();renderDraft();renderCustom();toast('Quiz saved')};
+$('#cqList').onclick=e=>{const d=e.target.dataset;if(d.cqp!==undefined)qPlayCustom(+d.cqp);else if(d.cqx!==undefined){qz.custom.splice(+d.cqx,1);qsave();renderCustom()}else if(d.cqs!==undefined){const code=btoa(unescape(encodeURIComponent(JSON.stringify(qz.custom[+d.cqs]))));$('#cqCode').value=code;$('#cqCode').select();try{navigator.clipboard.writeText(code).then(()=>toast('Share code copied'),()=>toast('Copy the code from the box'))}catch(x){toast('Copy the code from the box')}}};
+$('#cqImport').onclick=()=>{try{const c=JSON.parse(decodeURIComponent(escape(atob($('#cqCode').value.trim()))));if(!c.title||!Array.isArray(c.qs)||!c.qs.length||!c.qs.every(x=>typeof x.q==='string'&&Array.isArray(x.o)&&x.o.length>1&&Number.isInteger(x.c)&&x.o[x.c]!==undefined))throw 0;qz.custom.push({title:String(c.title).slice(0,80),qs:c.qs.slice(0,100).map(x=>({q:String(x.q),o:x.o.map(String),c:x.c}))});qsave();renderCustom();$('#cqCode').value='';toast('Quiz added')}catch(e){toast('That share code is not valid')}};
+document.addEventListener('keydown',e=>{if(!$('#qzPlay').hidden&&/^[1-4]$/.test(e.key)&&qr&&!qr.ans&&!e.ctrlKey&&!e.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||'')){qPick(+e.key-1)}});
+qGrades();
+
+/* whiteboard */
+const wbc=$('#wbCanvas'),wbx=wbc.getContext('2d');let wbCol='#14213d',wbSize=4,wbEr=false,wbDown=false,wbHist=[];
+wbx.fillStyle='#ffffff';wbx.fillRect(0,0,wbc.width,wbc.height);
+const wbPos=e=>{const r=wbc.getBoundingClientRect();return [(e.clientX-r.left)*wbc.width/r.width,(e.clientY-r.top)*wbc.height/r.height]};
+wbc.addEventListener('pointerdown',e=>{e.preventDefault();try{wbc.setPointerCapture(e.pointerId)}catch(x){}wbDown=true;wbHist.push(wbx.getImageData(0,0,wbc.width,wbc.height));if(wbHist.length>20)wbHist.shift();const [x,y]=wbPos(e);wbx.beginPath();wbx.moveTo(x,y);wbx.lineWidth=wbSize*(wbEr?4:1);wbx.lineCap=wbx.lineJoin='round';wbx.strokeStyle=wbEr?'#ffffff':wbCol;wbx.lineTo(x+.01,y+.01);wbx.stroke()});
+wbc.addEventListener('pointermove',e=>{if(!wbDown)return;const [x,y]=wbPos(e);wbx.lineTo(x,y);wbx.stroke()});
+['pointerup','pointercancel','pointerleave'].forEach(t=>wbc.addEventListener(t,()=>{wbDown=false}));
+$('#wbCols').onclick=e=>{const b=e.target.closest('[data-col]');if(!b)return;wbCol=b.dataset.col;wbEr=false;$$('#wbCols .sw').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#wbEraser').setAttribute('aria-pressed','false')};
+$('#wbEraser').onclick=e=>{wbEr=!wbEr;e.target.setAttribute('aria-pressed',wbEr)};
+$('#wbSize').oninput=e=>{wbSize=+e.target.value};
+$('#wbUndo').onclick=()=>{const h=wbHist.pop();if(h)wbx.putImageData(h,0,0)};
+$('#wbClear').onclick=()=>{wbHist.push(wbx.getImageData(0,0,wbc.width,wbc.height));wbx.fillStyle='#ffffff';wbx.fillRect(0,0,wbc.width,wbc.height)};
+$('#wbSave').onclick=()=>{try{const a=document.createElement('a');a.href=wbc.toDataURL('image/png');a.download='whiteboard.png';a.click()}catch(e){toast('Saving is not available here')}};
+
+/* AI helper */
+const aiQ=$('#aiQ');
+function aiLinks(){const t=encodeURIComponent(aiQ.value.trim());$('#aiGpt').href='https://chatgpt.com/?q='+t;$('#aiClaude').href='https://claude.ai/new?q='+t}
+aiQ.oninput=aiLinks;aiLinks();
+$('#aiChips').onclick=e=>{const b=e.target.closest('button');if(!b)return;aiQ.value=b.dataset.notes!==undefined?'Summarise these notes in simple words: '+($('#note').value||''):b.dataset.p;aiLinks();aiQ.focus()};
+$('#aiCopy').onclick=()=>{aiQ.select();try{navigator.clipboard.writeText(aiQ.value).then(()=>toast('Question copied'),()=>toast('Copy the text from the box'))}catch(e){toast('Copy the text from the box')}};
+
+/* page router: each feature has its own page */
+const PAGES={home:['.hero','#launch','#insights'],tasks:['#tasks'],timetable:['#schedule'],flashcards:['#cards'],notes:['#notes'],exams:['#exams'],habits:['#habits'],tools:['#calc','#music','#convert'],reading:['#reading'],mood:['#mood'],quiz:['#quiz'],board:['#board'],ai:['#ai'],feedback:['#contact']};
+function go(name){clearInterval(qtm);
+  if(name==='profile'){openProfile();return}
+  if(!PAGES[name])name='home';
+  closeProfile();document.body.classList.remove('viewhome');
+  const main=$('main#top'),show=PAGES[name].flatMap(s=>[...main.querySelectorAll(s)]);
+  main.querySelectorAll('.hero,#launch,section.tool').forEach(el=>el.hidden=!show.includes(el));
+  main.querySelectorAll('.grid').forEach(g=>{const n=[...g.children].filter(c=>!c.hidden).length;g.hidden=n===0;g.classList.toggle('one',n<2)});
+  main.classList.toggle('single',name!=='home'&&show.length<2);
+  $$('nav[aria-label="Sections"] a').forEach(a=>a.removeAttribute('aria-current'));
+  const cur=document.querySelector('nav [data-go="'+name+'"]');if(cur)cur.setAttribute('aria-current','page');
+  document.body.dataset.page=name;window.scrollTo(0,0)}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(a){e.preventDefault();go(a.dataset.go)}});
+
+renderExams();renderHabits();
+renderTasks();renderWeek();renderCard();words();draw();
+{const h=location.hash.slice(1);go(PAGES[h]?h:'home')}
+</script>
+</body>
+</html>
